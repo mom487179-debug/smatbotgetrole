@@ -1,153 +1,368 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Happy 2 Monthsนะที่รัก 💖</title>
+<title>getrole - members</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-body{
+
+*{
     margin:0;
-    font-family:sans-serif;
-    text-align:center;
-    background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#070707;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* พื้นหลัง */
+
+body::before{
+    content:'';
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:
+    radial-gradient(circle at top left,#5d4fff33,transparent 25%),
+    radial-gradient(circle at bottom right,#00d9ff22,transparent 25%);
+    z-index:-1;
+}
+
+/* navbar */
+
+nav{
+    width:100%;
+    padding:20px 8%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #1b1b1b;
+    backdrop-filter:blur(10px);
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+/* โลโก้ */
+
+.logo img{
+    width:58px;
+    height:58px;
+    border-radius:16px;
+    object-fit:cover;
+    box-shadow:0 0 25px #6c63ff77;
+}
+
+/* เปลี่ยนชื่อ */
+
+.logo h1{
+    font-size:26px;
+    font-weight:700;
+}
+
+/* เมนู */
+
+.menu{
+    display:flex;
+    gap:25px;
+}
+
+.menu a{
+    text-decoration:none;
+    color:#a3a3a3;
+    transition:.3s;
+}
+
+.menu a:hover{
     color:white;
 }
 
-/* ปุ่ม */
-button{
-    margin-top:40vh;
-    padding:15px 30px;
-    font-size:20px;
-    border:none;
-    border-radius:20px;
-    background:white;
-    color:#ff4d6d;
-    cursor:pointer;
+/* hero */
+
+.hero{
+    min-height:92vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:50px 8%;
 }
 
-/* ซ่อน */
-.hidden{ display:none; }
-
-/* กล่องข้อความ */
-#textBox{
-    margin-top:30vh;
-    font-size:20px;
-    padding:20px;
+.hero-container{
+    width:100%;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+    align-items:center;
 }
 
-/* รูป */
-#slide{
-    width:80%;
-    max-width:300px;
-    border-radius:20px;
-    margin-top:20px;
+/* ซ้าย */
+
+.left h2{
+    font-size:72px;
+    line-height:1.1;
+    margin-bottom:20px;
 }
 
-/* หัวใจ */
-.heart{
-    position:fixed;
-    animation:float 5s linear infinite;
+.left h2 span{
+    background:linear-gradient(90deg,#6c63ff,#00d9ff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
 }
 
-@keyframes float{
-    0%{transform:translateY(0);}
-    100%{transform:translateY(-100vh);}
+.left p{
+    color:#9d9d9d;
+    line-height:1.9;
+    max-width:620px;
+    margin-bottom:35px;
 }
+
+/* ปุ่มเชิญ */
+
+.invite-btn{
+    display:inline-block;
+    padding:17px 42px;
+    background:#6c63ff;
+    border-radius:15px;
+    text-decoration:none;
+    color:white;
+    font-weight:600;
+    transition:.3s;
+    box-shadow:0 0 25px #6c63ff55;
+}
+
+.invite-btn:hover{
+    transform:translateY(-5px);
+    box-shadow:0 0 40px #6c63ff;
+}
+
+/* ขวา */
+
+.right{
+    display:flex;
+    justify-content:center;
+}
+
+/* การ์ด */
+
+.bot-card{
+    width:430px;
+    background:#101010;
+    border:1px solid #222;
+    border-radius:30px;
+    padding:35px;
+    box-shadow:0 0 40px #00000055;
+}
+
+/* รูปโลโก้ */
+
+.bot-card img{
+    width:110px;
+    height:110px;
+    border-radius:25px;
+    object-fit:cover;
+    margin-bottom:20px;
+    box-shadow:0 0 30px #6c63ff55;
+}
+
+.bot-card h3{
+    font-size:35px;
+    margin-bottom:10px;
+}
+
+.bot-card p{
+    color:#999;
+    line-height:1.8;
+    margin-bottom:18px;
+}
+
+/* feature */
+
+.features{
+    padding:0 8% 100px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+}
+
+.feature{
+    background:#101010;
+    border:1px solid #202020;
+    border-radius:22px;
+    padding:30px;
+    transition:.3s;
+}
+
+.feature:hover{
+    transform:translateY(-7px);
+    border-color:#6c63ff;
+}
+
+.feature h4{
+    font-size:23px;
+    margin-bottom:15px;
+}
+
+.feature p{
+    color:#9b9b9b;
+    line-height:1.8;
+}
+
+/* footer */
+
+footer{
+    border-top:1px solid #1c1c1c;
+    text-align:center;
+    padding:30px;
+    color:#777;
+}
+
+/* มือถือ */
+
+@media(max-width:950px){
+
+.hero-container{
+    grid-template-columns:1fr;
+}
+
+.left h2{
+    font-size:52px;
+}
+
+.bot-card{
+    width:100%;
+}
+
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- หน้า 1 -->
-<button id="startBtn">กดสิคะแฟนเค้าา 💖</button>
+<!-- navbar -->
 
-<!-- หน้า 2 -->
-<div id="page2" class="hidden">
-    <div id="textBox"></div>
-    <button id="nextBtn" class="hidden">ไปต่อ 💕</button>
+<nav>
+
+<div class="logo">
+
+    <!-- ใส่โลโก้ตรง src -->
+    <img src="https://cdn.discordapp.com/attachments/1431397253444014222/1509267644451393617/IMG_9132.jpg?ex=6a188e87&is=6a173d07&hm=0c9be45eaf151785dd5f761490d3bb8a21d6dcd520c8dfe69683eda7ee95cd8c&">
+
+    <h1>getrole - members</h1>
+
 </div>
 
-<!-- หน้า 3 -->
-<div id="page3" class="hidden">
-    <h1>Happy 2 Months 💕</h1>
-    <img id="slide" src="img1.jpg.JPG">
+<div class="menu">
+    <a href="#">Home</a>
+    <a href="#">Bot</a>
+    <a href="#">Features</a>
 </div>
 
-<!-- 🎵 เพลงรัก -->
-<audio id="music" loop preload="auto">
-<source src="https://cdn.pixabay.com/audio/2023/03/27/audio_6f1c1a6d7f.mp3" type="audio/mpeg">
-</audio>
+</nav>
 
-<script>
-const startBtn = document.getElementById("startBtn");
-const page2 = document.getElementById("page2");
-const page3 = document.getElementById("page3");
-const textBox = document.getElementById("textBox");
-const nextBtn = document.getElementById("nextBtn");
-const music = document.getElementById("music");
-const slide = document.getElementById("slide");
+<!-- hero -->
 
-// 💖 ข้อความ
-const message = "เหมยคะ 2เดือนแล้วนะ โมรักเหมยน๊าา ไอคนเก่งของเค้า ถึงจะทะเลาะกันบ้าง ตีกันบ่อย แต่รักมากเลยนะรู้มั้ย โมไม่อยากให้เหมยจากไปไหน เหมยอยู่กับโมแบบนี้ไปนานๆนะคะ โมรักเหมยนะ 💗";
+<section class="hero">
 
-let i = 0;
+<div class="hero-container">
 
-// 🔥 ต้องตรงกับชื่อไฟล์ใน GitHub
-const images = ["img1.jpg.JPG","img2.jpg.JPG","img3.jpg.JPG","img4.jpg.JPG"];
-let imgIndex = 0;
+<!-- ซ้าย -->
 
-// ▶️ เริ่ม
-startBtn.onclick = () => {
-    startBtn.classList.add("hidden");
-    page2.classList.remove("hidden");
+<div class="left">
 
-    // 🔥 ทำให้เพลงเล่นได้แน่
-    music.muted = false;
-    music.volume = 1;
-    music.play().catch(()=>{});
+<h2>
+Modern <span>Role Bot</span>
+</h2>
 
-    typeText();
-};
+<p>
+Advanced Discord role system with modern UI,
+fast setup and stylish member experience.
+Easy role claiming with buttons and clean design.
+</p>
 
-// ✨ พิมพ์ข้อความทีละตัว
-function typeText(){
-    if(i < message.length){
-        textBox.innerHTML += message.charAt(i);
-        i++;
-        setTimeout(typeText,50);
-    } else {
-        nextBtn.classList.remove("hidden");
-    }
-}
+<!-- ปุ่มเชิญ -->
 
-// ➡️ ไปหน้ารูป
-nextBtn.onclick = () => {
-    page2.classList.add("hidden");
-    page3.classList.remove("hidden");
+<a class="invite-btn"
+href="https://discord.com/oauth2/authorize?client_id=1509180559627128973&permissions=0&integration_type=0&scope=bot"
+target="_blank">
 
-    setInterval(()=>{
-        imgIndex = (imgIndex+1) % images.length;
-        slide.src = images[imgIndex];
-    },2000);
+Invite Bot
 
-    createHearts();
-};
+</a>
 
-// 💕 หัวใจลอย
-function createHearts(){
-    setInterval(()=>{
-        let heart = document.createElement("div");
-        heart.className="heart";
-        heart.innerHTML="💖";
-        heart.style.left=Math.random()*100+"vw";
-        document.body.appendChild(heart);
+</div>
 
-        setTimeout(()=>heart.remove(),5000);
-    },300);
-}
-</script>
+<!-- ขวา -->
+
+<div class="right">
+
+<div class="bot-card">
+
+    <!-- โลโก้ใหญ่ -->
+    <img src="https://cdn.discordapp.com/attachments/1431397253444014222/1509267516495630458/IMG_9131.jpg?ex=6a188e68&is=6a173ce8&hm=29353f99c3a51eb92072b2702dc04e7e4d3f54e5eab50515b5ada8d1652ee897&">
+
+    <h3>getrole - members</h3>
+
+    <p>
+    Modern Discord bot for automatic role claiming
+    and stylish server management.
+    </p>
+
+    <hr style="border-color:#222; margin-bottom:20px;">
+
+    <p>✅ แจกยศอัตโนมัติ</p>
+    <p>✅ รองรับหลาย Role</p>
+    <p>✅ ใช้งานง่ายและรวดเร็ว</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- features -->
+
+<section class="features">
+
+<div class="feature">
+    <h4>⚡ Fast</h4>
+    <p>
+    Lightweight and optimized for every Discord server.
+    </p>
+</div>
+
+<div class="feature">
+    <h4>🎭 Role Claim</h4>
+    <p>
+    Easy role claiming system with modern buttons.
+    </p>
+</div>
+
+<div class="feature">
+    <h4>🛡 Security</h4>
+    <p>
+    Safe and stable role management experience.
+    </p>
+</div>
+
+</section>
+
+<footer>
+Thanks for visiting.
+</footer>
 
 </body>
 </html>
