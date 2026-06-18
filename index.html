@@ -1,368 +1,261 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>getrole - members</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<title>THANYA MEMBER LIST</title>
 
 <style>
-
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
+    font-family:Arial,sans-serif;
 }
 
 body{
-    background:#070707;
-    color:white;
-    overflow-x:hidden;
-}
-
-/* พื้นหลัง */
-
-body::before{
-    content:'';
-    position:fixed;
-    width:100%;
-    height:100%;
-    background:
-    radial-gradient(circle at top left,#5d4fff33,transparent 25%),
-    radial-gradient(circle at bottom right,#00d9ff22,transparent 25%);
-    z-index:-1;
-}
-
-/* navbar */
-
-nav{
-    width:100%;
-    padding:20px 8%;
+    height:100vh;
     display:flex;
-    justify-content:space-between;
+    justify-content:center;
     align-items:center;
-    border-bottom:1px solid #1b1b1b;
+    background:url("https://images.unsplash.com/photo-1503376780353-7e6692767b70") center center/cover no-repeat;
+}
+
+.container{
+    width:750px;
+    height:750px;
+    background:rgba(0,0,0,.8);
     backdrop-filter:blur(10px);
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 0 30px rgba(0,0,0,.5);
 }
 
-.logo{
-    display:flex;
-    align-items:center;
-    gap:15px;
+.header{
+    text-align:center;
+    padding:25px;
 }
 
-/* โลโก้ */
-
-.logo img{
-    width:58px;
-    height:58px;
-    border-radius:16px;
-    object-fit:cover;
-    box-shadow:0 0 25px #6c63ff77;
-}
-
-/* เปลี่ยนชื่อ */
-
-.logo h1{
-    font-size:26px;
-    font-weight:700;
-}
-
-/* เมนู */
-
-.menu{
-    display:flex;
-    gap:25px;
-}
-
-.menu a{
-    text-decoration:none;
-    color:#a3a3a3;
-    transition:.3s;
-}
-
-.menu a:hover{
+.header h1{
     color:white;
-}
-
-/* hero */
-
-.hero{
-    min-height:92vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:50px 8%;
-}
-
-.hero-container{
-    width:100%;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:60px;
-    align-items:center;
-}
-
-/* ซ้าย */
-
-.left h2{
-    font-size:72px;
-    line-height:1.1;
-    margin-bottom:20px;
-}
-
-.left h2 span{
-    background:linear-gradient(90deg,#6c63ff,#00d9ff);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-}
-
-.left p{
-    color:#9d9d9d;
-    line-height:1.9;
-    max-width:620px;
-    margin-bottom:35px;
-}
-
-/* ปุ่มเชิญ */
-
-.invite-btn{
-    display:inline-block;
-    padding:17px 42px;
-    background:#6c63ff;
-    border-radius:15px;
-    text-decoration:none;
-    color:white;
-    font-weight:600;
-    transition:.3s;
-    box-shadow:0 0 25px #6c63ff55;
-}
-
-.invite-btn:hover{
-    transform:translateY(-5px);
-    box-shadow:0 0 40px #6c63ff;
-}
-
-/* ขวา */
-
-.right{
-    display:flex;
-    justify-content:center;
-}
-
-/* การ์ด */
-
-.bot-card{
-    width:430px;
-    background:#101010;
-    border:1px solid #222;
-    border-radius:30px;
-    padding:35px;
-    box-shadow:0 0 40px #00000055;
-}
-
-/* รูปโลโก้ */
-
-.bot-card img{
-    width:110px;
-    height:110px;
-    border-radius:25px;
-    object-fit:cover;
-    margin-bottom:20px;
-    box-shadow:0 0 30px #6c63ff55;
-}
-
-.bot-card h3{
-    font-size:35px;
-    margin-bottom:10px;
-}
-
-.bot-card p{
-    color:#999;
-    line-height:1.8;
-    margin-bottom:18px;
-}
-
-/* feature */
-
-.features{
-    padding:0 8% 100px;
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:25px;
-}
-
-.feature{
-    background:#101010;
-    border:1px solid #202020;
-    border-radius:22px;
-    padding:30px;
-    transition:.3s;
-}
-
-.feature:hover{
-    transform:translateY(-7px);
-    border-color:#6c63ff;
-}
-
-.feature h4{
-    font-size:23px;
+    letter-spacing:5px;
     margin-bottom:15px;
 }
 
-.feature p{
-    color:#9b9b9b;
-    line-height:1.8;
+.search-box{
+    width:80%;
+    margin:auto;
 }
 
-/* footer */
-
-footer{
-    border-top:1px solid #1c1c1c;
-    text-align:center;
-    padding:30px;
-    color:#777;
-}
-
-/* มือถือ */
-
-@media(max-width:950px){
-
-.hero-container{
-    grid-template-columns:1fr;
-}
-
-.left h2{
-    font-size:52px;
-}
-
-.bot-card{
+.search-box input{
     width:100%;
+    padding:14px;
+    border:none;
+    border-radius:30px;
+    background:#111;
+    color:white;
+    outline:none;
 }
 
+.member-list{
+    height:580px;
+    overflow-y:auto;
 }
 
+.member{
+    display:flex;
+    align-items:center;
+    padding:15px 25px;
+    border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.member img{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+}
+
+.info{
+    margin-left:15px;
+}
+
+.name{
+    color:white;
+    font-weight:bold;
+}
+
+.rank{
+    color:#888;
+    font-size:13px;
+}
+
+.footer{
+    padding:12px 20px;
+    color:#888;
+    border-top:1px solid rgba(255,255,255,.05);
+}
 </style>
 </head>
-
 <body>
 
-<!-- navbar -->
+<div class="container">
 
-<nav>
+    <div class="header">
+        <h1>THANYA MEMBER LIST</h1>
 
-<div class="logo">
+        <div class="search-box">
+            <input type="text" id="search" placeholder="ค้นหารายชื่อ...">
+        </div>
+    </div>
 
-    <!-- ใส่โลโก้ตรง src -->
-    <img src="https://cdn.discordapp.com/attachments/1431397253444014222/1509267644451393617/IMG_9132.jpg?ex=6a188e87&is=6a173d07&hm=0c9be45eaf151785dd5f761490d3bb8a21d6dcd520c8dfe69683eda7ee95cd8c&">
+    <div class="member-list">
 
-    <h1>getrole - members</h1>
+        <div class="member">
+            <img src="https://i.pravatar.cc/100?img=1">
+            <div class="info">
+                <div class="name">TUN THANYA</div>
+                <div class="rank">MEMBER</div>
+            </div>
+        </div>
+
+        <div class="member">
+            <img src="https://i.pravatar.cc/100?img=2">
+            <div class="info">
+                <div class="name">KANKUAY THUNYA</div>
+                <div class="rank">MEMBER</div>
+            </div>
+        </div>
+
+        <div class="member">
+            <img src="https://i.pravatar.cc/100?img=3">
+            <div class="info">
+                <div class="name">BOSS LEWBOKZING</div>
+                <div class="rank">MEMBER</div>
+            </div>
+        </div>
+
+        <div class="member">
+            <img src="https://i.pravatar.cc/100?img=4">
+            <div class="info">
+                <div class="name">GUN THANYA</div>
+                <div class="rank">MEMBER</div>
+            </div>
+        </div>
+
+        <div class="member">
+            <img src="https://i.pravatar.cc/100?img=5">
+            <div class="info">
+                <div class="name">SATIN THANYA</div>
+                <div class="rank">MEMBER</div>
+            </div>
+        </div>
+
+        <div class="member">
+            <img src="https://i.pravatar.cc/100?img=6">
+            <div class="info">
+                <div class="name">AOM THANYA</div>
+                <div class="rank">MEMBER</div>
+            </div>
+        </div>
+
+        <div class="member">
+            <img src="https://i.pravatar.cc/100?img=7">
+            <div class="info">
+                <div class="name">LEO THANYA</div>
+                <div class="rank">MEMBER</div>
+            </div>
+        </div>
+
+        <div class="member">
+            <img src="https://i.pravatar.cc/100?img=8">
+            <div class="info">
+                <div class="name">BRUCELEE THANYA</div>
+                <div class="rank">MEMBER</div>
+            </div>
+        </div>
+
+        <div class="member">
+            <img src="https://i.pravatar.cc/100?img=9">
+            <div class="info">
+                <div class="name">POP MAMEPOKO</div>
+                <div class="rank">MEMBER</div>
+            </div>
+        </div>
+
+        <div class="member">
+            <img src="https://i.pravatar.cc/100?img=10">
+            <div class="info">
+                <div class="name">BANK THANYA</div>
+                <div class="rank">MEMBER</div>
+            </div>
+        </div>
+
+        <div class="member">
+            <img src="https://i.pravatar.cc/100?img=11">
+            <div class="info">
+                <div class="name">BRIGHT THANYA</div>
+                <div class="rank">MEMBER</div>
+            </div>
+        </div>
+
+        <div class="member">
+            <img src="https://i.pravatar.cc/100?img=12">
+            <div class="info">
+                <div class="name">WHAN THANYA</div>
+                <div class="rank">MEMBER</div>
+            </div>
+        </div>
+
+        <div class="member">
+            <img src="https://i.pravatar.cc/100?img=13">
+            <div class="info">
+                <div class="name">BABY THANYA</div>
+                <div class="rank">MEMBER</div>
+            </div>
+        </div>
+
+        <div class="member">
+            <img src="https://i.pravatar.cc/100?img=14">
+            <div class="info">
+                <div class="name">ZACK THANYA</div>
+                <div class="rank">MEMBER</div>
+            </div>
+        </div>
+
+        <div class="member">
+            <img src="https://i.pravatar.cc/100?img=15">
+            <div class="info">
+                <div class="name">BIG THANYA</div>
+                <div class="rank">MEMBER</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Total Members: 15
+    </div>
 
 </div>
 
-<div class="menu">
-    <a href="#">Home</a>
-    <a href="#">Bot</a>
-    <a href="#">Features</a>
-</div>
+<script>
+const search = document.getElementById("search");
 
-</nav>
+search.addEventListener("keyup", () => {
+    const value = search.value.toLowerCase();
+    const members = document.querySelectorAll(".member");
 
-<!-- hero -->
+    members.forEach(member => {
+        const name = member.querySelector(".name").textContent.toLowerCase();
 
-<section class="hero">
-
-<div class="hero-container">
-
-<!-- ซ้าย -->
-
-<div class="left">
-
-<h2>
-Modern <span>Role Bot</span>
-</h2>
-
-<p>
-Advanced Discord role system with modern UI,
-fast setup and stylish member experience.
-Easy role claiming with buttons and clean design.
-</p>
-
-<!-- ปุ่มเชิญ -->
-
-<a class="invite-btn"
-href="https://discord.com/oauth2/authorize?client_id=1509180559627128973&permissions=0&integration_type=0&scope=bot"
-target="_blank">
-
-Invite Bot
-
-</a>
-
-</div>
-
-<!-- ขวา -->
-
-<div class="right">
-
-<div class="bot-card">
-
-    <!-- โลโก้ใหญ่ -->
-    <img src="https://cdn.discordapp.com/attachments/1431397253444014222/1509267516495630458/IMG_9131.jpg?ex=6a188e68&is=6a173ce8&hm=29353f99c3a51eb92072b2702dc04e7e4d3f54e5eab50515b5ada8d1652ee897&">
-
-    <h3>getrole - members</h3>
-
-    <p>
-    Modern Discord bot for automatic role claiming
-    and stylish server management.
-    </p>
-
-    <hr style="border-color:#222; margin-bottom:20px;">
-
-    <p>✅ แจกยศอัตโนมัติ</p>
-    <p>✅ รองรับหลาย Role</p>
-    <p>✅ ใช้งานง่ายและรวดเร็ว</p>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- features -->
-
-<section class="features">
-
-<div class="feature">
-    <h4>⚡ Fast</h4>
-    <p>
-    Lightweight and optimized for every Discord server.
-    </p>
-</div>
-
-<div class="feature">
-    <h4>🎭 Role Claim</h4>
-    <p>
-    Easy role claiming system with modern buttons.
-    </p>
-</div>
-
-<div class="feature">
-    <h4>🛡 Security</h4>
-    <p>
-    Safe and stable role management experience.
-    </p>
-</div>
-
-</section>
-
-<footer>
-Thanks for visiting.
-</footer>
+        if(name.includes(value)){
+            member.style.display = "flex";
+        }else{
+            member.style.display = "none";
+        }
+    });
+});
+</script>
 
 </body>
 </html>
