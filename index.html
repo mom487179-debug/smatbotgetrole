@@ -1,261 +1,238 @@
 <!DOCTYPE html>
+
 <html lang="th">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>THANYA MEMBER LIST</title>
+<title>SmartRole Bot</title>
 
 <style>
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
+    font-family:'Segoe UI',sans-serif;
 }
 
 body{
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:url("https://images.unsplash.com/photo-1503376780353-7e6692767b70") center center/cover no-repeat;
-}
-
-.container{
-    width:750px;
-    height:750px;
-    background:rgba(0,0,0,.8);
-    backdrop-filter:blur(10px);
-    border-radius:20px;
-    overflow:hidden;
-    box-shadow:0 0 30px rgba(0,0,0,.5);
-}
-
-.header{
-    text-align:center;
-    padding:25px;
-}
-
-.header h1{
+    background:#0f172a;
     color:white;
-    letter-spacing:5px;
+}
+
+header{
+    padding:20px 10%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111827;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:bold;
+    color:#60a5fa;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    margin-left:20px;
+}
+
+.hero{
+    text-align:center;
+    padding:100px 20px;
+}
+
+.hero img{
+    width:150px;
+    border-radius:50%;
+    margin-bottom:20px;
+    box-shadow:0 0 25px #60a5fa;
+}
+
+.hero h1{
+    font-size:55px;
     margin-bottom:15px;
 }
 
-.search-box{
-    width:80%;
+.hero p{
+    color:#cbd5e1;
+    max-width:700px;
     margin:auto;
+    margin-bottom:30px;
 }
 
-.search-box input{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:30px;
-    background:#111;
+.btn{
+    display:inline-block;
+    padding:15px 35px;
+    background:#3b82f6;
     color:white;
-    outline:none;
-}
-
-.member-list{
-    height:580px;
-    overflow-y:auto;
-}
-
-.member{
-    display:flex;
-    align-items:center;
-    padding:15px 25px;
-    border-bottom:1px solid rgba(255,255,255,.05);
-}
-
-.member img{
-    width:55px;
-    height:55px;
-    border-radius:50%;
-}
-
-.info{
-    margin-left:15px;
-}
-
-.name{
-    color:white;
+    text-decoration:none;
+    border-radius:10px;
     font-weight:bold;
+    transition:0.3s;
 }
 
-.rank{
-    color:#888;
-    font-size:13px;
+.btn:hover{
+    background:#2563eb;
+    transform:scale(1.05);
 }
 
-.footer{
-    padding:12px 20px;
-    color:#888;
-    border-top:1px solid rgba(255,255,255,.05);
+.features{
+    padding:80px 10%;
+}
+
+.features h2{
+    text-align:center;
+    margin-bottom:40px;
+    font-size:40px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+}
+
+.card{
+    background:#1e293b;
+    padding:25px;
+    border-radius:15px;
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.card h3{
+    color:#60a5fa;
+    margin-bottom:10px;
+}
+
+.stats{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    padding:60px 20px;
+    background:#111827;
+}
+
+.stat{
+    text-align:center;
+}
+
+.stat h2{
+    color:#60a5fa;
+    font-size:40px;
+}
+
+footer{
+    text-align:center;
+    padding:20px;
+    background:#020617;
+    color:#94a3b8;
 }
 </style>
+
 </head>
+
 <body>
 
-<div class="container">
+<header>
+    <div class="logo">SmartRole</div>
+    <nav>
+        <a href="#features">ฟีเจอร์</a>
+        <a href="#invite">เชิญบอท</a>
+    </nav>
+</header>
 
-    <div class="header">
-        <h1>THANYA MEMBER LIST</h1>
+<section class="hero">
+    <img src="logo.png" alt="Bot Logo">
 
-        <div class="search-box">
-            <input type="text" id="search" placeholder="ค้นหารายชื่อ...">
-        </div>
+```
+<h1>SmartRole Bot</h1>
+
+<p>
+    บอทรับยศอัตโนมัติสำหรับ Discord
+    ใช้งานง่าย รวดเร็ว ปลอดภัย
+    จัดการยศสมาชิกได้แบบอัตโนมัติ
+</p>
+
+<a class="btn" id="invite"
+   href="https://discord.com/oauth2/authorize?client_id=1509180559627128973&permissions=0&integration_type=0&scope=bot"
+   target="_blank">
+   ➕ เชิญบอทเข้าดิสคอร์ด
+</a>
+```
+
+</section>
+
+<section class="features" id="features">
+    <h2>ฟีเจอร์เด่น</h2>
+
+```
+<div class="cards">
+
+    <div class="card">
+        <h3>🎖️ รับยศอัตโนมัติ</h3>
+        <p>สมาชิกกดรับยศได้ทันที ไม่ต้องรอแอดมิน</p>
     </div>
 
-    <div class="member-list">
-
-        <div class="member">
-            <img src="https://i.pravatar.cc/100?img=1">
-            <div class="info">
-                <div class="name">TUN THANYA</div>
-                <div class="rank">MEMBER</div>
-            </div>
-        </div>
-
-        <div class="member">
-            <img src="https://i.pravatar.cc/100?img=2">
-            <div class="info">
-                <div class="name">KANKUAY THUNYA</div>
-                <div class="rank">MEMBER</div>
-            </div>
-        </div>
-
-        <div class="member">
-            <img src="https://i.pravatar.cc/100?img=3">
-            <div class="info">
-                <div class="name">BOSS LEWBOKZING</div>
-                <div class="rank">MEMBER</div>
-            </div>
-        </div>
-
-        <div class="member">
-            <img src="https://i.pravatar.cc/100?img=4">
-            <div class="info">
-                <div class="name">GUN THANYA</div>
-                <div class="rank">MEMBER</div>
-            </div>
-        </div>
-
-        <div class="member">
-            <img src="https://i.pravatar.cc/100?img=5">
-            <div class="info">
-                <div class="name">SATIN THANYA</div>
-                <div class="rank">MEMBER</div>
-            </div>
-        </div>
-
-        <div class="member">
-            <img src="https://i.pravatar.cc/100?img=6">
-            <div class="info">
-                <div class="name">AOM THANYA</div>
-                <div class="rank">MEMBER</div>
-            </div>
-        </div>
-
-        <div class="member">
-            <img src="https://i.pravatar.cc/100?img=7">
-            <div class="info">
-                <div class="name">LEO THANYA</div>
-                <div class="rank">MEMBER</div>
-            </div>
-        </div>
-
-        <div class="member">
-            <img src="https://i.pravatar.cc/100?img=8">
-            <div class="info">
-                <div class="name">BRUCELEE THANYA</div>
-                <div class="rank">MEMBER</div>
-            </div>
-        </div>
-
-        <div class="member">
-            <img src="https://i.pravatar.cc/100?img=9">
-            <div class="info">
-                <div class="name">POP MAMEPOKO</div>
-                <div class="rank">MEMBER</div>
-            </div>
-        </div>
-
-        <div class="member">
-            <img src="https://i.pravatar.cc/100?img=10">
-            <div class="info">
-                <div class="name">BANK THANYA</div>
-                <div class="rank">MEMBER</div>
-            </div>
-        </div>
-
-        <div class="member">
-            <img src="https://i.pravatar.cc/100?img=11">
-            <div class="info">
-                <div class="name">BRIGHT THANYA</div>
-                <div class="rank">MEMBER</div>
-            </div>
-        </div>
-
-        <div class="member">
-            <img src="https://i.pravatar.cc/100?img=12">
-            <div class="info">
-                <div class="name">WHAN THANYA</div>
-                <div class="rank">MEMBER</div>
-            </div>
-        </div>
-
-        <div class="member">
-            <img src="https://i.pravatar.cc/100?img=13">
-            <div class="info">
-                <div class="name">BABY THANYA</div>
-                <div class="rank">MEMBER</div>
-            </div>
-        </div>
-
-        <div class="member">
-            <img src="https://i.pravatar.cc/100?img=14">
-            <div class="info">
-                <div class="name">ZACK THANYA</div>
-                <div class="rank">MEMBER</div>
-            </div>
-        </div>
-
-        <div class="member">
-            <img src="https://i.pravatar.cc/100?img=15">
-            <div class="info">
-                <div class="name">BIG THANYA</div>
-                <div class="rank">MEMBER</div>
-            </div>
-        </div>
-
+    <div class="card">
+        <h3>⚡ ทำงานรวดเร็ว</h3>
+        <p>ระบบตอบสนองทันทีเมื่อมีการกดรับยศ</p>
     </div>
 
-    <div class="footer">
-        Total Members: 15
+    <div class="card">
+        <h3>🔒 ปลอดภัย</h3>
+        <p>จัดการสิทธิ์อย่างปลอดภัยและถูกต้อง</p>
+    </div>
+
+    <div class="card">
+        <h3>📜 ระบบ Log</h3>
+        <p>ตรวจสอบการทำงานและบันทึกข้อมูลได้</p>
+    </div>
+
+    <div class="card">
+        <h3>🛠️ ตั้งค่าง่าย</h3>
+        <p>ใช้งานได้ภายในไม่กี่นาที</p>
+    </div>
+
+    <div class="card">
+        <h3>🌎 รองรับทุกเซิร์ฟเวอร์</h3>
+        <p>ใช้งานได้กับ Discord Server ทุกขนาด</p>
     </div>
 
 </div>
+```
 
-<script>
-const search = document.getElementById("search");
+</section>
 
-search.addEventListener("keyup", () => {
-    const value = search.value.toLowerCase();
-    const members = document.querySelectorAll(".member");
+<section class="stats">
+    <div class="stat">
+        <h2>24/7</h2>
+        <p>Online</p>
+    </div>
 
-    members.forEach(member => {
-        const name = member.querySelector(".name").textContent.toLowerCase();
+```
+<div class="stat">
+    <h2>100%</h2>
+    <p>Free</p>
+</div>
 
-        if(name.includes(value)){
-            member.style.display = "flex";
-        }else{
-            member.style.display = "none";
-        }
-    });
-});
-</script>
+<div class="stat">
+    <h2>Fast</h2>
+    <p>Response</p>
+</div>
+```
+
+</section>
+
+<footer>
+    © 2026 SmartRole Bot | All Rights Reserved
+</footer>
 
 </body>
 </html>
