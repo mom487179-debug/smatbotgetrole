@@ -1,241 +1,219 @@
 <!DOCTYPE html>
-
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SmartRole Bot</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ขอเป็นแฟนหน่อยได้ไหม?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
-}
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffeef5 0%, #e8f4ff 50%, #fff0f5 100%);
+            font-family: 'Segoe UI', 'Kanit', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
 
-body{
-    background-image:url("https://cdn.discordapp.com/attachments/1432928631897849858/1517428216959336499/images.png?ex=6a363ea7&is=6a34ed27&hm=04e025ee5bd5201965a324472d5120a3da15759152066c7360c60f7061aedf14&");
-    background-size:cover;
-    background-position:center;
-    background-attachment:fixed;
-    color:white;
-}
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.3;
+            animation: float 8s infinite ease-in-out;
+            pointer-events: none;
+        }
 
-header{
-    padding:20px 10%;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:#111827;
-}
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.4; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
 
-.logo{
-    font-size:28px;
-    font-weight:bold;
-    color:#60a5fa;
-}
+        .container {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(255, 105, 180, 0.15);
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+            animation: fadeIn 0.8s ease;
+        }
 
-nav a{
-    color:white;
-    text-decoration:none;
-    margin-left:20px;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.hero{
-    text-align:center;
-    padding:100px 20px;
-}
+        h1 {
+            color: #e91e63;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
 
-.hero img{
-    width:150px;
-    border-radius:50%;
-    margin-bottom:20px;
-    box-shadow:0 0 25px #60a5fa;
-}
+        .subtitle {
+            color: #666;
+            font-size: 1.05rem;
+            margin-bottom: 35px;
+            line-height: 1.6;
+        }
 
-.hero h1{
-    font-size:55px;
-    margin-bottom:15px;
-}
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
 
-.hero p{
-    color:#cbd5e1;
-    max-width:700px;
-    margin:auto;
-    margin-bottom:30px;
-}
+        button {
+            padding: 14px 32px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            min-width: 120px;
+        }
 
-.btn{
-    display:inline-block;
-    padding:15px 35px;
-    background:#3b82f6;
-    color:white;
-    text-decoration:none;
-    border-radius:10px;
-    font-weight:bold;
-    transition:0.3s;
-}
+        #yesBtn {
+            background: linear-gradient(135deg, #ff6b9d, #ff8fab);
+            color: white;
+            box-shadow: 0 8px 20px rgba(255, 107, 157, 0.4);
+        }
 
-.btn:hover{
-    background:#2563eb;
-    transform:scale(1.05);
-}
+        #yesBtn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 12px 25px rgba(255, 107, 157, 0.5);
+        }
 
-.features{
-    padding:80px 10%;
-}
+        #noBtn {
+            background: #f0f0f0;
+            color: #888;
+        }
 
-.features h2{
-    text-align:center;
-    margin-bottom:40px;
-    font-size:40px;
-}
+        #noBtn:hover {
+            background: #e0e0e0;
+            transform: scale(1.05);
+        }
 
-.cards{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:25px;
-}
+        .result {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
 
-.card{
-    background:#1e293b;
-    padding:25px;
-    border-radius:15px;
-    transition:0.3s;
-}
+        .result.show {
+            display: block;
+        }
 
-.card:hover{
-    transform:translateY(-5px);
-}
+        .result h2 {
+            color: #e91e63;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+        }
 
-.card h3{
-    color:#60a5fa;
-    margin-bottom:10px;
-}
+        .result p {
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
 
-.stats{
-    display:flex;
-    justify-content:center;
-    gap:40px;
-    padding:60px 20px;
-    background:#111827;
-}
+        .heart-big {
+            font-size: 60px;
+            animation: pulse 1.2s infinite;
+            margin-bottom: 20px;
+        }
 
-.stat{
-    text-align:center;
-}
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
 
-.stat h2{
-    color:#60a5fa;
-    font-size:40px;
-}
+        .retry {
+            margin-top: 20px;
+            font-size: 0.95rem;
+            color: #999;
+        }
 
-footer{
-    text-align:center;
-    padding:20px;
-    background:#020617;
-    color:#94a3b8;
-}
-</style>
-
+        .retry a {
+            color: #e91e63;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
 </head>
-
 <body>
+    <div class="heart" style="left: 10%; animation-delay: 0s;">❤️</div>
+    <div class="heart" style="left: 25%; animation-delay: 1.5s;">💗</div>
+    <div class="heart" style="left: 40%; animation-delay: 3s;">💖</div>
+    <div class="heart" style="left: 60%; animation-delay: 0.8s;">💕</div>
+    <div class="heart" style="left: 75%; animation-delay: 2.2s;">❤️</div>
+    <div class="heart" style="left: 90%; animation-delay: 4s;">💗</div>
 
-<header>
-    <div class="logo">SmartRole</div>
-    <nav>
-        <a href="#features">ฟีเจอร์</a>
-        <a href="#invite">เชิญบอท</a>
-    </nav>
-</header>
+    <div class="container" id="main">
+        <h1>ขอเป็นแฟนหน่อยได้ไหม?</h1>
+        <p class="subtitle">
+            ผมชอบเธอจริง ๆ นะ<br>
+            อยากดูแลเธอ อยากอยู่ข้าง ๆ เธอ<br>
+            รับเป็นแฟนผมได้ไหม?
+        </p>
 
-<section class="hero">
-    <img src="https://images-ext-1.discordapp.net/external/wj42a45vZpS8CXmU7vt1VCBclhypm8YNZmyqjOVmK8E/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1509180559627128973/a_6f243216d2517453f4bbd4c2c633fbca.gif" alt="Bot Logo">
-
-```
-<h1>SmartRole Bot</h1>
-
-<p>
-    บอทรับยศอัตโนมัติสำหรับ Discord
-    ใช้งานง่าย รวดเร็ว ปลอดภัย
-    จัดการยศสมาชิกได้แบบอัตโนมัติ
-</p>
-
-<a class="btn" id="invite"
-   href="https://discord.com/oauth2/authorize?client_id=1509180559627128973&permissions=0&integration_type=0&scope=bot"
-   target="_blank">
-   ➕ เชิญบอทเข้าดิสคอร์ด
-</a>
-```
-
-</section>
-
-<section class="features" id="features">
-    <h2>ฟีเจอร์เด่น</h2>
-
-```
-<div class="cards">
-
-    <div class="card">
-        <h3>🎖️ รับยศอัตโนมัติ</h3>
-        <p>สมาชิกกดรับยศได้ทันที ไม่ต้องรอแอดมิน</p>
+        <div class="buttons">
+            <button id="yesBtn" onclick="sayYes()">ได้เลย ❤️</button>
+            <button id="noBtn" onclick="sayNo()">ยังไม่พร้อม</button>
+        </div>
     </div>
 
-    <div class="card">
-        <h3>⚡ ทำงานรวดเร็ว</h3>
-        <p>ระบบตอบสนองทันทีเมื่อมีการกดรับยศ</p>
+    <div class="container result" id="yesResult">
+        <div class="heart-big">💖</div>
+        <h2>เย้! ดีใจมากเลย</h2>
+        <p>
+            ขอบคุณที่รับเป็นแฟนนะ<br>
+            ผมจะพยายามทำให้เธอมีความสุขที่สุด<br>
+            ตั้งแต่วันนี้เป็นต้นไป เราเป็นของกันและกันแล้วนะ
+        </p>
+        <p style="color: #e91e63; font-weight: 600;">รักเธอที่สุด ❤️</p>
     </div>
 
-    <div class="card">
-        <h3>🔒 ปลอดภัย</h3>
-        <p>จัดการสิทธิ์อย่างปลอดภัยและถูกต้อง</p>
+    <div class="container result" id="noResult">
+        <h2>ไม่เป็นไรนะ 😊</h2>
+        <p>
+            ผมเข้าใจ<br>
+            แต่ผมจะรอเธออยู่นะ<br>
+            ถ้าพร้อมเมื่อไหร่ บอกผมได้เลย
+        </p>
+        <p class="retry">
+            <a href="#" onclick="reset()">ลองคิดดูอีกทีไหม?</a>
+        </p>
     </div>
 
-    <div class="card">
-        <h3>📜 ระบบ Log</h3>
-        <p>ตรวจสอบการทำงานและบันทึกข้อมูลได้</p>
-    </div>
+    <script>
+        function sayYes() {
+            document.getElementById('main').style.display = 'none';
+            document.getElementById('yesResult').classList.add('show');
+        }
 
-    <div class="card">
-        <h3>🛠️ ตั้งค่าง่าย</h3>
-        <p>ใช้งานได้ภายในไม่กี่นาที</p>
-    </div>
+        function sayNo() {
+            document.getElementById('main').style.display = 'none';
+            document.getElementById('noResult').classList.add('show');
+        }
 
-    <div class="card">
-        <h3>🌎 รองรับทุกเซิร์ฟเวอร์</h3>
-        <p>ใช้งานได้กับ Discord Server ทุกขนาด</p>
-    </div>
-
-</div>
-```
-
-</section>
-
-<section class="stats">
-    <div class="stat">
-        <h2>24/7</h2>
-        <p>Online</p>
-    </div>
-
-```
-<div class="stat">
-    <h2>100%</h2>
-    <p>Free</p>
-</div>
-
-<div class="stat">
-    <h2>Fast</h2>
-    <p>Response</p>
-</div>
-```
-
-</section>
-
-<footer>
-    © 2026 SmartRole Bot | All Rights Reserved
-</footer>
-
+        function reset() {
+            document.getElementById('noResult').classList.remove('show');
+            document.getElementById('main').style.display = 'block';
+        }
+    </script>
 </body>
 </html>
