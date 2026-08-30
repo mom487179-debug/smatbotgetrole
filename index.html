@@ -1,219 +1,314 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แอนค้าบเป็นแฟนกับเค้าไหม🥺?</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discord Bot Dashboard</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --card: #1a1d24;
+    --accent: #5865F2;
+    --text: #e6e6e6;
+    --muted: #9aa0ac;
+    --border: #2a2e37;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  p.subtitle { color: var(--muted); margin-top: 0; font-size: 14px; }
 
-        body {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #ffeef5 0%, #e8f4ff 50%, #fff0f5 100%);
-            font-family: 'Segoe UI', 'Kanit', sans-serif;
-            overflow: hidden;
-            position: relative;
-        }
+  .warning {
+    background: #2b1d1d;
+    border: 1px solid #5c2b2b;
+    color: #ffb3b3;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
 
-        .heart {
-            position: absolute;
-            font-size: 20px;
-            opacity: 0.3;
-            animation: float 8s infinite ease-in-out;
-            pointer-events: none;
-        }
+  .token-box {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  input[type="password"], input[type="text"] {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #12141a;
+    color: var(--text);
+    font-size: 14px;
+  }
+  button {
+    background: var(--accent);
+    border: none;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  button:hover { opacity: 0.9; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.4; }
-            90% { opacity: 0.4; }
-            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
-        }
+  .bot-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .bot-header img {
+    width: 56px; height: 56px; border-radius: 50%;
+  }
+  .bot-header .name { font-size: 18px; font-weight: 700; }
+  .bot-header .tag { color: var(--muted); font-size: 13px; }
 
-        .container {
-            background: white;
-            padding: 50px 40px;
-            border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(255, 105, 180, 0.15);
-            text-align: center;
-            max-width: 420px;
-            width: 90%;
-            position: relative;
-            z-index: 10;
-            animation: fadeIn 0.8s ease;
-        }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-card .num { font-size: 26px; font-weight: 700; color: var(--accent); }
+  .stat-card .label { font-size: 13px; color: var(--muted); margin-top: 4px; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+  h2 { font-size: 16px; margin: 24px 0 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
 
-        h1 {
-            color: #e91e63;
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            line-height: 1.4;
-        }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; }
 
-        .subtitle {
-            color: #666;
-            font-size: 1.05rem;
-            margin-bottom: 35px;
-            line-height: 1.6;
-        }
+  .tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { background: #22252e; border: 1px solid var(--border); padding: 4px 10px; border-radius: 999px; font-size: 12px; }
 
-        .buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        button {
-            padding: 14px 32px;
-            font-size: 1.1rem;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            min-width: 120px;
-        }
-
-        #yesBtn {
-            background: linear-gradient(135deg, #ff6b9d, #ff8fab);
-            color: white;
-            box-shadow: 0 8px 20px rgba(255, 107, 157, 0.4);
-        }
-
-        #yesBtn:hover {
-            transform: scale(1.08);
-            box-shadow: 0 12px 25px rgba(255, 107, 157, 0.5);
-        }
-
-        #noBtn {
-            background: #f0f0f0;
-            color: #888;
-        }
-
-        #noBtn:hover {
-            background: #e0e0e0;
-            transform: scale(1.05);
-        }
-
-        .result {
-            display: none;
-            animation: fadeIn 0.6s ease;
-        }
-
-        .result.show {
-            display: block;
-        }
-
-        .result h2 {
-            color: #e91e63;
-            font-size: 1.6rem;
-            margin-bottom: 15px;
-        }
-
-        .result p {
-            color: #555;
-            font-size: 1.1rem;
-            line-height: 1.7;
-            margin-bottom: 25px;
-        }
-
-        .heart-big {
-            font-size: 60px;
-            animation: pulse 1.2s infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-        }
-
-        .retry {
-            margin-top: 20px;
-            font-size: 0.95rem;
-            color: #999;
-        }
-
-        .retry a {
-            color: #e91e63;
-            text-decoration: none;
-            font-weight: 600;
-        }
-    </style>
+  #error { color: #ff8080; font-size: 14px; margin-top: 8px; display: none; }
+  #loading { color: var(--muted); font-size: 14px; display: none; }
+  #result { display: none; }
+</style>
 </head>
 <body>
-    <div class="heart" style="left: 10%; animation-delay: 0s;">❤️</div>
-    <div class="heart" style="left: 25%; animation-delay: 1.5s;">💗</div>
-    <div class="heart" style="left: 40%; animation-delay: 3s;">💖</div>
-    <div class="heart" style="left: 60%; animation-delay: 0.8s;">💕</div>
-    <div class="heart" style="left: 75%; animation-delay: 2.2s;">❤️</div>
-    <div class="heart" style="left: 90%; animation-delay: 4s;">💗</div>
+<div class="container">
+  <h1>🤖 Discord Bot Dashboard</h1>
+  <p class="subtitle">กรอกโทเค่นบอทเพื่อดูสถิติและความสามารถของบอท (ประมวลผลในเบราว์เซอร์เท่านั้น)</p>
 
-    <div class="container" id="main">
-        <h1>แอนเป็นแฟนกับเค้าไหม🥺</h1>
-        <p class="subtitle">
-            เค้ารักเธอจริง ๆ นะ<br>
-            อยากดูแลเธอ อยากอยู่ข้าง ๆ เธอ<br>
-            เป็นแฟนกันนะ 28/8/69
-        </p>
+  <div class="warning">
+    ⚠️ โทเค่นจะถูกส่งตรงจากเบราว์เซอร์คุณไปยัง Discord API เท่านั้น หน้านี้ไม่มีการเก็บหรือส่งโทเค่นไปเซิร์ฟเวอร์อื่นใด
+    แต่ควรใช้กับโทเค่นบอทของตัวเองเท่านั้น และไม่ควรแชร์ลิงก์เว็บนี้ให้ผู้อื่นกรอกโทเค่นของเขา
+  </div>
 
-        <div class="buttons">
-            <button id="yesBtn" onclick="sayYes()">ได้เลย ❤️</button>
-            <button id="noBtn" onclick="sayNo()">ยังไม่พร้อม</button>
-        </div>
-    </div>
+  <div class="token-box">
+    <input type="password" id="tokenInput" placeholder="วางโทเค่นบอทที่นี่ (Bot Token)">
+    <button id="loadBtn" onclick="loadDashboard()">โหลดข้อมูล</button>
+  </div>
 
-    <div class="container result" id="yesResult">
-        <div class="heart-big">💖</div>
-        <h2>เย้! ดีใจมากเลย</h2>
-        <p>
-            ขอบคุณที่ตกลงเป็นแฟนนะ<br>
-            เค้าจะพยายามทำให้เธอมีความสุขที่สุด<br>
-            ตั้งแต่วันนี้เป็นต้นไป เราเป็นของกันและกันแล้วนะ
-        </p>
-        <p style="color: #e91e63; font-weight: 600;">รักเธอที่สุด ❤️</p>
-    </div>
+  <div id="loading">⏳ กำลังดึงข้อมูลจาก Discord...</div>
+  <div id="error"></div>
 
-    <div class="container result" id="noResult">
-        <h2>ไม่เป็นไรนะ 😊</h2>
-        <p>
-            เค้าเข้าใจ<br>
-            แต่เค้าจะรอเธออยู่นะ<br>
-            ถ้าพร้อมเมื่อไหร่ บอกเค้าได้เลย
-        </p>
-        <p class="retry">
-            <a href="#" onclick="reset()">ลองคิดดูอีกทีไหม?</a>
-        </p>
-    </div>
+  <div id="result">
+    <div class="bot-header" id="botHeader"></div>
 
-    <script>
-        function sayYes() {
-            document.getElementById('main').style.display = 'none';
-            document.getElementById('yesResult').classList.add('show');
-        }
+    <div class="stats-grid" id="statsGrid"></div>
 
-        function sayNo() {
-            document.getElementById('main').style.display = 'none';
-            document.getElementById('noResult').classList.add('show');
-        }
+    <h2>เซิร์ฟเวอร์ที่บอทอยู่</h2>
+    <table>
+      <thead><tr><th>ชื่อเซิร์ฟเวอร์</th><th>สมาชิก (ประมาณ)</th><th>ออนไลน์ (ประมาณ)</th></tr></thead>
+      <tbody id="guildTableBody"></tbody>
+    </table>
 
-        function reset() {
-            document.getElementById('noResult').classList.remove('show');
-            document.getElementById('main').style.display = 'block';
-        }
-    </script>
+    <h2>Slash Commands ที่บอทมี</h2>
+    <div id="commandsList" class="tag-list"></div>
+
+    <h2>Intents / ความสามารถ</h2>
+    <div id="intentsList" class="tag-list"></div>
+  </div>
+</div>
+
+<script>
+const API = "https://discord.com/api/v10";
+
+async function apiGet(path, token) {
+  const res = await fetch(API + path, {
+    headers: { "Authorization": "Bot " + token }
+  });
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`(${res.status}) เรียก ${path} ไม่สำเร็จ: ${body}`);
+  }
+  return res.json();
+}
+
+// Discord application flag bits → human-readable intents/capabilities
+const APP_FLAGS = [
+  [1 << 12, "Gateway Presence Intent (limited)"],
+  [1 << 13, "Gateway Presence Intent"],
+  [1 << 14, "Gateway Guild Members Intent (limited)"],
+  [1 << 15, "Gateway Guild Members Intent"],
+  [1 << 18, "Gateway Message Content Intent (limited)"],
+  [1 << 19, "Gateway Message Content Intent"],
+  [1 << 23, "Application Commands Badge"],
+];
+
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+async function loadDashboard() {
+  const token = document.getElementById('tokenInput').value.trim();
+  const errorBox = document.getElementById('error');
+  const loading = document.getElementById('loading');
+  const result = document.getElementById('result');
+  const btn = document.getElementById('loadBtn');
+
+  errorBox.style.display = 'none';
+  result.style.display = 'none';
+
+  if (!token) {
+    errorBox.textContent = "กรุณากรอกโทเค่นบอทก่อน";
+    errorBox.style.display = 'block';
+    return;
+  }
+
+  loading.style.display = 'block';
+  btn.disabled = true;
+
+  try {
+    // 1. Bot user info
+    const me = await apiGet('/users/@me', token);
+
+    // 2. Application info (for flags/name/description)
+    const app = await apiGet('/oauth2/applications/@me', token);
+
+    // 3. Guild list (bot is in)
+    const guilds = await apiGet('/users/@me/guilds', token);
+
+    // 4. Per-guild counts (with_counts=true)
+    const guildDetails = await Promise.all(
+      guilds.map(g =>
+        apiGet(`/guilds/${g.id}?with_counts=true`, token).catch(() => null)
+      )
+    );
+
+    // 5. Global slash commands
+    let commands = [];
+    try {
+      commands = await apiGet(`/applications/${app.id}/commands`, token);
+    } catch (e) { /* ignore if none / no perms */ }
+
+    // ---- Render bot header ----
+    const avatarUrl = me.avatar
+      ? `https://cdn.discordapp.com/avatars/${me.id}/${me.avatar}.png?size=128`
+      : `https://cdn.discordapp.com/embed/avatars/0.png`;
+
+    const header = document.getElementById('botHeader');
+    header.innerHTML = '';
+    const img = document.createElement('img');
+    img.src = avatarUrl;
+    header.appendChild(img);
+    const infoDiv = document.createElement('div');
+    const nameEl = el('div', 'name', `${me.username}${me.discriminator && me.discriminator !== '0' ? '#' + me.discriminator : ''}`);
+    const tagEl = el('div', 'tag', app.description || 'ไม่มีคำอธิบาย');
+    infoDiv.appendChild(nameEl);
+    infoDiv.appendChild(tagEl);
+    header.appendChild(infoDiv);
+
+    // ---- Stats ----
+    let totalMembers = 0;
+    let totalOnline = 0;
+    guildDetails.forEach(g => {
+      if (g) {
+        totalMembers += g.approximate_member_count || 0;
+        totalOnline += g.approximate_presence_count || 0;
+      }
+    });
+
+    const statsGrid = document.getElementById('statsGrid');
+    statsGrid.innerHTML = '';
+    const stats = [
+      { num: guilds.length, label: 'เซิร์ฟเวอร์ทั้งหมด' },
+      { num: totalMembers.toLocaleString(), label: 'สมาชิกรวม (ประมาณ)' },
+      { num: totalOnline.toLocaleString(), label: 'ออนไลน์รวม (ประมาณ)' },
+      { num: commands.length, label: 'Slash Commands' },
+    ];
+    stats.forEach(s => {
+      const card = el('div', 'stat-card');
+      card.appendChild(el('div', 'num', String(s.num)));
+      card.appendChild(el('div', 'label', s.label));
+      statsGrid.appendChild(card);
+    });
+
+    // ---- Guild table ----
+    const tbody = document.getElementById('guildTableBody');
+    tbody.innerHTML = '';
+    guilds.forEach((g, i) => {
+      const detail = guildDetails[i];
+      const tr = document.createElement('tr');
+      tr.appendChild(el('td', null, g.name));
+      tr.appendChild(el('td', null, detail ? (detail.approximate_member_count ?? '-').toLocaleString() : '-'));
+      tr.appendChild(el('td', null, detail ? (detail.approximate_presence_count ?? '-').toLocaleString() : '-'));
+      tbody.appendChild(tr);
+    });
+
+    // ---- Commands ----
+    const cmdList = document.getElementById('commandsList');
+    cmdList.innerHTML = '';
+    if (commands.length === 0) {
+      cmdList.appendChild(el('div', null, 'ไม่พบ Slash Command (หรือบอทยังไม่ได้ลงทะเบียนคำสั่ง)'));
+    } else {
+      commands.forEach(c => {
+        cmdList.appendChild(el('span', 'tag', `/${c.name} — ${c.description || ''}`));
+      });
+    }
+
+    // ---- Intents / flags ----
+    const intentsList = document.getElementById('intentsList');
+    intentsList.innerHTML = '';
+    const flags = app.flags || 0;
+    let found = false;
+    for (const [bit, label] of APP_FLAGS) {
+      if (flags & bit) {
+        intentsList.appendChild(el('span', 'tag', label));
+        found = true;
+      }
+    }
+    if (!found) {
+      intentsList.appendChild(el('span', 'tag', 'ไม่มี privileged intent ที่เปิดใช้งาน'));
+    }
+
+    result.style.display = 'block';
+  } catch (err) {
+    errorBox.textContent = "เกิดข้อผิดพลาด: " + err.message;
+    errorBox.style.display = 'block';
+  } finally {
+    loading.style.display = 'none';
+    btn.disabled = false;
+  }
+}
+</script>
 </body>
 </html>
