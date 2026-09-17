@@ -1,818 +1,579 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GANG ROSTER - MANAGEMENT</title>
-    <!-- Google Fonts & FontAwesome Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        :root {
-            --primary-gold: #dfa751;
-            --gold-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-            --gold-shine: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-            --bg-dark: #0a0a0c; 
-            --card-bg: rgba(18, 18, 24, 0.75);
-            --card-border: rgba(223, 167, 81, 0.3);
-            --text-light: #f1f1f1;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Kanit', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at center, rgba(223, 167, 81, 0.1) 0%, transparent 70%);
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: var(--text-light);
-            min-height: 100vh;
-            padding-bottom: 50px;
-            transition: background-image 0.5s ease;
-        }
-
-        /* Header & Navbar */
-        header {
-            background: rgba(10, 10, 12, 0.85);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--card-border);
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .gang-brand {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .gang-logo {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--primary-gold);
-            box-shadow: 0 0 10px rgba(223, 167, 81, 0.5);
-        }
-
-        .gang-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: var(--gold-shine);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn-music-toggle {
-            background: rgba(223, 167, 81, 0.1);
-            color: var(--primary-gold);
-            border: 1px solid var(--primary-gold);
-            padding: 8px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-music-toggle:hover {
-            background: var(--primary-gold);
-            color: #000;
-        }
-
-        .btn-admin {
-            background: transparent;
-            color: var(--primary-gold);
-            border: 1px solid var(--primary-gold);
-            padding: 8px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-admin:hover {
-            background: var(--primary-gold);
-            color: #000;
-            box-shadow: 0 0 15px rgba(223, 167, 81, 0.6);
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        /* Search & Filter Controls */
-        .controls {
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .search-box {
-            position: relative;
-            width: 100%;
-            max-width: 500px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 12px 20px 12px 45px;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid var(--card-border);
-            border-radius: 25px;
-            color: #fff;
-            font-size: 1rem;
-            outline: none;
-            backdrop-filter: blur(5px);
-            transition: 0.3s;
-        }
-
-        .search-box input:focus {
-            border-color: var(--primary-gold);
-            box-shadow: 0 0 10px rgba(223, 167, 81, 0.4);
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--primary-gold);
-        }
-
-        /* Roster Sections */
-        .section-title {
-            font-size: 1.5rem;
-            margin: 40px 0 20px;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 2px solid var(--card-border);
-            padding-bottom: 8px;
-            color: var(--primary-gold);
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 20px;
-        }
-
-        /* Member Card Design */
-        .member-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .member-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(223, 167, 81, 0.2);
-        }
-
-        .member-card.owner { border-color: #ff3e3e; }
-        .member-card.leader { border-color: #3e8bff; }
-        .member-card.member { border-color: var(--card-border); }
-
-        .role-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        .badge-owner { background: rgba(255, 62, 62, 0.2); color: #ff5555; border: 1px solid #ff5555; }
-        .badge-leader { background: rgba(62, 139, 255, 0.2); color: #5599ff; border: 1px solid #5599ff; }
-        .badge-member { background: rgba(223, 167, 81, 0.2); color: var(--primary-gold); border: 1px solid var(--primary-gold); }
-
-        .avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 10px auto 15px;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .member-name {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .member-alias {
-            font-size: 0.85rem;
-            color: #aaa;
-            margin-bottom: 15px;
-        }
-
-        .member-actions {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .btn-sm {
-            padding: 4px 10px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            border: none;
-        }
-        .btn-edit { background: #ffb703; color: #000; }
-        .btn-delete { background: #e63946; color: #fff; }
-
-        /* Modal Popup System */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: #15151c;
-            border: 1px solid var(--primary-gold);
-            width: 90%;
-            max-width: 500px;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 0 25px rgba(223, 167, 81, 0.3);
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 15px; right: 20px;
-            font-size: 1.5rem;
-            color: #aaa;
-            cursor: pointer;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: var(--primary-gold);
-            font-size: 0.9rem;
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            background: #0a0a0c;
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: #fff;
-            outline: none;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            border-color: var(--primary-gold);
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 12px;
-            background: var(--gold-shine);
-            border: none;
-            color: #000;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .admin-panel-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .tab-btn {
-            background: none;
-            border: none;
-            color: #aaa;
-            padding: 8px 15px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .tab-btn.active {
-            color: var(--primary-gold);
-            border-bottom: 2px solid var(--primary-gold);
-        }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        /* ซ่อนเครื่องเล่นเพลง YouTube ไว้เบื้องหลัง */
-        #music-player-container {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-            left: -9999px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GANG ROSTER - MANAGEMENT</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --primary-gold:#dfa751;
+  --gold-shine:linear-gradient(45deg,#bf953f,#fcf6ba,#b38728,#fbf5b7,#aa771c);
+  --bg-dark:#0a0a0c;
+  --card-bg:rgba(18,18,24,.75);
+  --card-border:rgba(223,167,81,.3);
+  --text-light:#f1f1f1;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Kanit',sans-serif}
+body{
+  background-color:var(--bg-dark);
+  background-image:radial-gradient(circle at center,rgba(223,167,81,.1) 0%,transparent 70%);
+  background-size:cover;background-position:center;background-attachment:fixed;
+  color:var(--text-light);min-height:100vh;padding-bottom:60px;transition:background-image .5s ease;
+}
+header{
+  background:rgba(10,10,12,.85);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--card-border);padding:15px 5%;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  flex-wrap:wrap;position:sticky;top:0;z-index:100;
+}
+.gang-brand{display:flex;align-items:center;gap:15px;min-width:0}
+.gang-logo-wrap{
+  width:50px;height:50px;border-radius:50%;flex:0 0 auto;overflow:hidden;
+  border:2px solid var(--primary-gold);box-shadow:0 0 10px rgba(223,167,81,.5);
+  background:#151519;display:flex;align-items:center;justify-content:center;
+  font-weight:700;color:var(--primary-gold);
+}
+.gang-logo-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.gang-title{
+  font-size:1.8rem;font-weight:700;background:var(--gold-shine);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  text-transform:uppercase;letter-spacing:2px;overflow-wrap:anywhere;
+}
+.header-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.btn-music-toggle,.btn-admin{
+  background:rgba(223,167,81,.1);color:var(--primary-gold);border:1px solid var(--primary-gold);
+  padding:8px 16px;border-radius:20px;cursor:pointer;font-weight:600;
+  transition:all .3s ease;display:flex;align-items:center;gap:8px;font-size:.9rem;
+}
+.btn-music-toggle:hover,.btn-admin:hover{background:var(--primary-gold);color:#000}
+.btn-music-toggle.on{background:var(--primary-gold);color:#000}
+.container{max-width:1200px;margin:24px auto;padding:0 20px}
+.sync-bar{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:22px;font-size:.85rem;color:#9a9aa5;text-align:center}
+.sync-dot{width:9px;height:9px;border-radius:50%;background:#7a7a7a;flex:0 0 auto}
+.sync-dot.online{background:#3ddc84;box-shadow:0 0 8px rgba(61,220,132,.7)}
+.sync-dot.local{background:#ffb703}
+.controls{margin-bottom:10px;display:flex;justify-content:center}
+.search-box{position:relative;width:100%;max-width:500px}
+.search-box input{
+  width:100%;padding:12px 20px 12px 45px;background:rgba(0,0,0,.6);
+  border:1px solid var(--card-border);border-radius:25px;color:#fff;font-size:1rem;
+  outline:none;backdrop-filter:blur(5px);transition:.3s;
+}
+.search-box input:focus{border-color:var(--primary-gold);box-shadow:0 0 10px rgba(223,167,81,.4)}
+.search-box i{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--primary-gold)}
+.section-title{
+  font-size:1.4rem;margin:40px 0 20px;text-transform:uppercase;display:flex;align-items:center;gap:10px;
+  border-bottom:2px solid var(--card-border);padding-bottom:8px;color:var(--primary-gold);
+}
+.grid-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
+.empty-note{color:#7d7d88;font-size:.9rem;padding:4px 2px}
+.member-card{
+  background:var(--card-bg);border:1px solid var(--card-border);border-radius:15px;
+  padding:22px 18px 18px;text-align:center;backdrop-filter:blur(10px);
+  transition:transform .3s ease,box-shadow .3s ease;position:relative;overflow:hidden;
+}
+.member-card:hover{transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,.5),0 0 15px rgba(223,167,81,.2)}
+.member-card.owner{border-color:#ff3e3e}
+.member-card.leader{border-color:#3e8bff}
+.role-badge{position:absolute;top:14px;right:14px;padding:3px 10px;border-radius:12px;font-size:.72rem;font-weight:700;text-transform:uppercase}
+.badge-owner{background:rgba(255,62,62,.2);color:#ff7777;border:1px solid #ff5555}
+.badge-leader{background:rgba(62,139,255,.2);color:#7fb3ff;border:1px solid #5599ff}
+.badge-member{background:rgba(223,167,81,.2);color:var(--primary-gold);border:1px solid var(--primary-gold)}
+.avatar-wrap{
+  width:100px;height:100px;border-radius:50%;margin:14px auto 15px;overflow:hidden;
+  border:3px solid rgba(255,255,255,.1);background:#1b1b22;display:flex;
+  align-items:center;justify-content:center;font-size:2.2rem;font-weight:700;color:var(--primary-gold);
+}
+.avatar-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.member-name{font-size:1.15rem;font-weight:600;margin-bottom:5px;overflow-wrap:anywhere}
+.member-alias{font-size:.85rem;color:#aaa;margin-bottom:12px;overflow-wrap:anywhere}
+.member-actions{display:flex;justify-content:center;gap:10px;margin-top:10px}
+.btn-sm{padding:5px 12px;border-radius:6px;font-size:.8rem;cursor:pointer;border:none;font-weight:600}
+.btn-edit{background:#ffb703;color:#000}
+.btn-delete{background:#e63946;color:#fff}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:1000;justify-content:center;align-items:center;padding:16px}
+.modal.open{display:flex}
+.modal-content{
+  background:#15151c;border:1px solid var(--primary-gold);width:100%;max-width:520px;
+  border-radius:15px;padding:28px;box-shadow:0 0 25px rgba(223,167,81,.3);
+  position:relative;max-height:88vh;overflow-y:auto;
+}
+.close-btn{position:absolute;top:12px;right:18px;font-size:1.6rem;color:#aaa;cursor:pointer;line-height:1}
+.modal-content h2{color:var(--primary-gold);text-align:center;margin-bottom:20px;font-size:1.3rem}
+.form-group{margin-bottom:15px}
+.form-group label{display:block;margin-bottom:6px;color:var(--primary-gold);font-size:.88rem}
+.form-group input,.form-group select{width:100%;padding:10px;background:#0a0a0c;border:1px solid #333;border-radius:8px;color:#fff;outline:none;font-size:.95rem}
+.form-group input:focus,.form-group select:focus{border-color:var(--primary-gold)}
+.hint{font-size:.78rem;color:#82828e;margin-top:6px;line-height:1.5}
+.btn-submit{width:100%;padding:12px;background:var(--gold-shine);border:none;color:#000;font-weight:700;border-radius:8px;cursor:pointer;margin-top:10px;font-size:.95rem}
+.btn-submit[disabled]{opacity:.5;cursor:not-allowed}
+.btn-ghost{width:100%;padding:10px;background:transparent;border:1px solid #444;color:#bbb;border-radius:8px;cursor:pointer;margin-top:8px;font-size:.88rem}
+.admin-panel-tabs{display:flex;gap:8px;margin-bottom:20px;border-bottom:1px solid #333;padding-bottom:10px;flex-wrap:wrap}
+.tab-btn{background:none;border:none;color:#aaa;padding:8px 14px;cursor:pointer;font-weight:600;font-size:.9rem}
+.tab-btn.active{color:var(--primary-gold);border-bottom:2px solid var(--primary-gold)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+  background:#1c1c24;border:1px solid var(--primary-gold);color:var(--text-light);
+  padding:12px 20px;border-radius:10px;font-size:.9rem;z-index:2000;opacity:0;
+  pointer-events:none;transition:opacity .25s ease,transform .25s ease;max-width:90vw;text-align:center;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#music-frame{position:absolute;width:1px;height:1px;overflow:hidden;left:-9999px;top:0}
+@media (max-width:520px){.gang-title{font-size:1.25rem;letter-spacing:1px}header{padding:12px 16px}}
+</style>
 </head>
 <body>
 
-    <!-- Header Navbar -->
-    <header>
-        <div class="gang-brand">
-            <img id="display-logo" class="gang-logo" src="https://via.placeholder.com/150/000000/dfa751?text=GANG" alt="Gang Logo">
-            <h1 id="display-name" class="gang-title">THE ROYAL GANG</h1>
-        </div>
-        <div class="header-controls">
-            <!-- ปุ่มควบคุมการเปิด/ปิดเพลง -->
-            <button class="btn-music-toggle" id="music-toggle-btn" onclick="toggleMusic()">
-                <i class="fa-solid fa-music"></i> <span id="music-btn-text">เล่นเพลง</span>
-            </button>
-            <button class="btn-admin" id="admin-main-btn" onclick="openLoginModal()">
-                <i class="fa-solid fa-lock"></i> <span id="admin-btn-text">ADMIN MENU</span>
-            </button>
-        </div>
-    </header>
+<header>
+  <div class="gang-brand">
+    <div class="gang-logo-wrap" id="display-logo-wrap"><span>G</span></div>
+    <h1 id="display-name" class="gang-title">THE ROYAL GANG</h1>
+  </div>
+  <div class="header-controls">
+    <button class="btn-music-toggle" id="music-toggle-btn" type="button"><i class="fa-solid fa-music"></i> <span id="music-btn-text">เล่นเพลง</span></button>
+    <button class="btn-admin" id="admin-main-btn" type="button"><i class="fa-solid fa-lock"></i> <span id="admin-btn-text">ADMIN MENU</span></button>
+  </div>
+</header>
 
-    <!-- Main Content Container -->
-    <div class="container">
-        <!-- Search Bar -->
-        <div class="controls">
-            <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="searchInput" onkeyup="filterMembers()" placeholder="ค้นหาชื่อสมาชิก หรือ ฉายาในเกม...">
-            </div>
-        </div>
+<div class="container">
+  <div class="sync-bar">
+    <span class="sync-dot" id="sync-dot"></span>
+    <span id="sync-text">กำลังเชื่อมต่อฐานข้อมูล...</span>
+  </div>
 
-        <!-- OWNER SECTION -->
-        <div class="section-title"><i class="fa-solid fa-crown"></i> GANG OWNER</div>
-        <div class="grid-container" id="owner-grid"></div>
+  <div class="controls">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="searchInput" placeholder="ค้นหาชื่อสมาชิก หรือ ฉายาในเกม...">
+    </div>
+  </div>
 
-        <!-- LEADER SECTION -->
-        <div class="section-title"><i class="fa-solid fa-shield-halved"></i> GANG LEADER</div>
-        <div class="grid-container" id="leader-grid"></div>
+  <div class="section-title"><i class="fa-solid fa-crown"></i> GANG OWNER</div>
+  <div class="grid-container" id="owner-grid"></div>
 
-        <!-- MEMBER SECTION -->
-        <div class="section-title"><i class="fa-solid fa-users"></i> GANG MEMBER</div>
-        <div class="grid-container" id="member-grid"></div>
+  <div class="section-title"><i class="fa-solid fa-shield-halved"></i> GANG LEADER</div>
+  <div class="grid-container" id="leader-grid"></div>
+
+  <div class="section-title"><i class="fa-solid fa-users"></i> GANG MEMBER</div>
+  <div class="grid-container" id="member-grid"></div>
+</div>
+
+<div class="modal" id="loginModal">
+  <div class="modal-content">
+    <span class="close-btn" data-close="loginModal">&times;</span>
+    <h2><i class="fa-solid fa-shield-halved"></i> เข้าสู่ระบบ ADMIN</h2>
+    <form id="loginForm">
+      <div class="form-group">
+        <label>รหัสผ่าน</label>
+        <input type="password" id="adminPassword" placeholder="กรอกรหัสผ่านเพื่อจัดการเว็บ..." required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn-submit">LOGIN</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="adminModal">
+  <div class="modal-content">
+    <span class="close-btn" data-close="adminModal">&times;</span>
+    <div class="admin-panel-tabs">
+      <button class="tab-btn active" type="button" data-tab="add-tab">เพิ่มสมาชิก</button>
+      <button class="tab-btn" type="button" data-tab="style-tab">ตกแต่งเว็บไซต์</button>
     </div>
 
-    <!-- 1. LOGIN MODAL -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('loginModal')">&times;</span>
-            <h2 style="color: var(--primary-gold); text-align: center; margin-bottom: 20px;">
-                <i class="fa-solid fa-shield-cat"></i> เข้าสู่ระบบ ADMIN
-            </h2>
-            <form onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label>รหัสผ่าน (Default: 5720)</label>
-                    <input type="password" id="adminPassword" placeholder="กรอกรหัสผ่านเพื่อจัดการเว็บ..." required>
-                </div>
-                <button type="submit" class="btn-submit">LOGIN</button>
-            </form>
+    <div id="add-tab" class="tab-content active">
+      <h3 id="form-title" style="color:#fff;margin-bottom:15px;font-size:1.05rem;">เพิ่มรายชื่อใหม่</h3>
+      <form id="memberForm">
+        <input type="hidden" id="edit-id" value="">
+        <div class="form-group">
+          <label>ชื่อสมาชิก / Nickname</label>
+          <input type="text" id="m-name" placeholder="เช่น Alex" required>
         </div>
-    </div>
-
-    <!-- 2. ADMIN CONTROL PANEL MODAL -->
-    <div class="modal" id="adminModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('adminModal')">&times;</span>
-            
-            <div class="admin-panel-tabs">
-                <button class="tab-btn active" onclick="switchTab('add-tab', event)">เพิ่มสมาชิก</button>
-                <button class="tab-btn" onclick="switchTab('style-tab', event)">ตกแต่งเว็บไซต์</button>
-            </div>
-
-            <!-- Tab 1: เพิ่ม/แก้ไขสมาชิก -->
-            <div id="add-tab" class="tab-content active">
-                <h3 id="form-title" style="color: #fff; margin-bottom: 15px;">เพิ่มรายชื่อใหม่</h3>
-                <form id="memberForm" onsubmit="saveMember(event)">
-                    <input type="hidden" id="edit-index" value="-1">
-                    <div class="form-group">
-                        <label>ชื่อสมาชิก / Nickname</label>
-                        <input type="text" id="m-name" placeholder="เช่น Alex" required>
-                    </div>
-                    <div class="form-group">
-                        <label>ฉายา / ตำแหน่งย่อย</label>
-                        <input type="text" id="m-alias" placeholder="เช่น สายบวกหลัก / หมอประจำแก๊ง">
-                    </div>
-                    <div class="form-group">
-                        <label>ระดับ / ตำแหน่งหลัก</label>
-                        <select id="m-role">
-                            <option value="owner">Owner (หัวหน้าใหญ่)</option>
-                            <option value="leader">Leader (รองหัวหน้า/สภา)</option>
-                            <option value="member" selected>Member (สมาชิก)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>URL รูปภาพโปรไฟล์</label>
-                        <input type="url" id="m-img" placeholder="https://example.com/image.jpg">
-                    </div>
-                    <button type="submit" class="btn-submit" id="btn-save-member">บันทึกข้อมูล</button>
-                </form>
-            </div>
-
-            <!-- Tab 2: ตกแต่งเว็บไซต์ -->
-            <div id="style-tab" class="tab-content">
-                <h3 style="color: #fff; margin-bottom: 15px;">ตั้งค่ารูปร่างหน้าตาเว็บ</h3>
-                <form onsubmit="saveSettings(event)">
-                    <div class="form-group">
-                        <label>ชื่อแก๊ง (Gang Name)</label>
-                        <input type="text" id="set-gang-name">
-                    </div>
-                    <div class="form-group">
-                        <label>URL โลโก้แก๊ง</label>
-                        <input type="url" id="set-gang-logo">
-                    </div>
-                    <div class="form-group">
-                        <label>URL ภาพพื้นหลังเว็บไซต์ (Background Image)</label>
-                        <input type="url" id="set-bg-url" placeholder="ใส่ ลิงก์รูปภาพ เช่น https://site.com/bg.jpg">
-                    </div>
-                    <!-- ช่องใส่ลิงก์ YouTube -->
-                    <div class="form-group">
-                        <label><i class="fa-brands fa-youtube" style="color: #ff0000;"></i> ลิงก์เพลง YouTube (YouTube Video URL)</label>
-                        <input type="url" id="set-yt-url" placeholder="เช่น https://www.youtube.com/watch?v=dQw4w9WgXcQ">
-                    </div>
-                    <button type="submit" class="btn-submit">อัปเดตการตกแต่ง</button>
-                </form>
-            </div>
-
+        <div class="form-group">
+          <label>ฉายา / ตำแหน่งย่อย</label>
+          <input type="text" id="m-alias" placeholder="เช่น สายบวกหลัก / หมอประจำแก๊ง">
         </div>
+        <div class="form-group">
+          <label>ระดับ / ตำแหน่งหลัก</label>
+          <select id="m-role">
+            <option value="owner">Owner (หัวหน้าใหญ่)</option>
+            <option value="leader">Leader (รองหัวหน้า/สภา)</option>
+            <option value="member" selected>Member (สมาชิก)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>URL รูปภาพโปรไฟล์</label>
+          <input type="url" id="m-img" placeholder="https://example.com/image.jpg">
+        </div>
+        <button type="submit" class="btn-submit" id="btn-save-member">บันทึกข้อมูล</button>
+        <button type="button" class="btn-ghost" id="btn-cancel-edit" style="display:none;">ยกเลิกการแก้ไข</button>
+      </form>
     </div>
 
-    <!-- Container สำหรับซ่อนเครื่องเล่น YouTube -->
-    <div id="music-player-container">
-        <div id="youtube-player"></div>
+    <div id="style-tab" class="tab-content">
+      <h3 style="color:#fff;margin-bottom:15px;font-size:1.05rem;">ตั้งค่ารูปร่างหน้าตาเว็บ</h3>
+      <form id="settingsForm">
+        <div class="form-group">
+          <label>ชื่อแก๊ง (Gang Name)</label>
+          <input type="text" id="set-gang-name">
+        </div>
+        <div class="form-group">
+          <label>URL โลโก้แก๊ง</label>
+          <input type="url" id="set-gang-logo">
+        </div>
+        <div class="form-group">
+          <label>URL ภาพพื้นหลังเว็บไซต์</label>
+          <input type="url" id="set-bg-url" placeholder="https://site.com/bg.jpg">
+        </div>
+        <div class="form-group">
+          <label><i class="fa-brands fa-youtube" style="color:#ff0000;"></i> ลิงก์เพลง YouTube</label>
+          <input type="url" id="set-yt-url" placeholder="https://www.youtube.com/watch?v=xxxxxxxxxxx">
+        </div>
+        <button type="submit" class="btn-submit">อัปเดตการตกแต่ง</button>
+      </form>
     </div>
+  </div>
+</div>
 
-    <!-- โหลด YouTube Iframe Player API -->
-    <script src="https://www.youtube.com/iframe_api"></script>
+<div id="music-frame"></div>
+<div class="toast" id="toast"></div>
 
-    <!-- โหลด Firebase SDK แบบ Compatibility -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script type="module">
+/* ===================================================================
+   ตั้งค่าตรงนี้ที่เดียว  ->  เอา config จาก Firebase Console
+   (Project settings > Your apps > Web app > SDK setup and configuration)
+   ถ้าปล่อยว่างไว้ เว็บจะทำงานแบบเก็บข้อมูลในเครื่องเดียว (โหมดเดิม)
+   =================================================================== */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBEFcNqZY1TXpA2sfvgZlq3O9SrPIcHK1I",
+  authDomain: "casper-9c90b.firebaseapp.com",
+  projectId: "casper-9c90b",
+  storageBucket: "casper-9c90b.firebasestorage.app",
+  messagingSenderId: "192071685224",
+  appId: "1:192071685224:web:3d8cd4c6ca4a47f0eb17dd"
+};
 
-    <!-- JavaScript Logic -->
-    <script>
-        // --- 0. FIREBASE SETUP ---
-        // !!! นำค่าที่ได้จาก Firebase Console มาวางแทนที่วัตถุข้างล่างนี้ !!!
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
+const ADMIN_PASS = "5720";
+const SITE_ID    = "main";          // เปลี่ยนได้ ถ้าอยากใช้ฐานข้อมูลเดียวกันหลายแก๊ง
+/* =================================================================== */
 
-        // เริ่มต้นการใช้งาน Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+const LS_KEY = "gangLocalBackup";
 
-        // --- 1. DEFAULT DATA & INITIALIZATION ---
-        const DEFAULT_PASS = "5720";
-        let isAdminLoggedIn = false;
-        let ytPlayer = null;
-        let isMusicPlaying = false;
+const defaultSettings = { name:"THE ROYAL GANG", logo:"", bgUrl:"", ytUrl:"" };
+const defaultMembers = [
+  { id:"seed1", name:"Vito Corleone",  alias:"Godfather",   role:"owner",  img:"" },
+  { id:"seed2", name:"Sonny Corleone", alias:"Underboss",   role:"leader", img:"" },
+  { id:"seed3", name:"Tom Hagen",      alias:"Consigliere", role:"leader", img:"" },
+  { id:"seed4", name:"Paulie Gatto",   alias:"Soldier",     role:"member", img:"" }
+];
 
-        let gangSettings = {
-            name: "THE ROYAL GANG",
-            logo: "https://via.placeholder.com/150/000000/dfa751?text=GANG",
-            bgUrl: "",
-            ytUrl: ""
-        };
+let settings = structuredClone(defaultSettings);
+let members  = structuredClone(defaultMembers);
 
-        let members = [];
+let fs = null;                 // Firestore helpers (null = โหมดเครื่องเดียว)
+let isAdmin = false;
+let musicOn = false;
+let seeded = false;
 
-        // ฟังการเปลี่ยนแปลงข้อมูลแบบ Realtime จาก Firebase
-        db.ref('gangData').on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                if (data.settings) {
-                    gangSettings = data.settings;
-                    applySettings();
-                }
-                if (data.members) {
-                    members = data.members;
-                } else {
-                    members = [];
-                }
-                renderMembers();
-            } else {
-                // หากยังไม่มีข้อมูลในระบบ ให้สร้างข้อมูลเริ่มต้น
-                const initialMembers = [
-                    { name: "Vito Corleone", alias: "Godfather", role: "owner", img: "https://i.pravatar.cc/150?img=11" },
-                    { name: "Sonny Corleone", alias: "Underboss", role: "leader", img: "https://i.pravatar.cc/150?img=12" },
-                    { name: "Tom Hagen", alias: "Consigliere", role: "leader", img: "https://i.pravatar.cc/150?img=13" },
-                    { name: "Paulie Gatto", alias: "Soldier", role: "member", img: "https://i.pravatar.cc/150?img=14" }
-                ];
-                db.ref('gangData').set({
-                    settings: gangSettings,
-                    members: initialMembers
-                });
-            }
-        });
+/* ---------- helpers ---------- */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const newId = () => "m" + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const safeUrl = u => /^https?:\/\//i.test(String(u||"").trim()) ? String(u).trim() : "";
 
-        // เรียกใช้งานฟังก์ชันเมื่อเปิดหน้าเว็บ
-        window.onload = function() {
-            // ปลดล็อค Autoplay เมื่อผู้ใช้นับการกดคลิกแรกในหน้าเว็บ
-            document.body.addEventListener('click', function unlockAutoplay() {
-                if (ytPlayer && typeof ytPlayer.playVideo === 'function' && !isMusicPlaying) {
-                    ytPlayer.playVideo();
-                }
-                document.body.removeEventListener('click', unlockAutoplay);
-            }, { once: true });
-        };
+let toastTimer;
+function toast(msg){
+  const t = $("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
+}
+function setSync(state, text){
+  $("sync-dot").className = "sync-dot" + (state ? " " + state : "");
+  $("sync-text").textContent = text;
+}
 
-        // --- 2. YOUTUBE API & MUSIC LOGIC ---
-        function extractYouTubeID(url) {
-            if (!url) return null;
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
-        }
+/* ---------- local backup ---------- */
+function saveLocal(){
+  try { localStorage.setItem(LS_KEY, JSON.stringify({ settings, members })); } catch {}
+}
+function loadLocal(){
+  try {
+    const o = JSON.parse(localStorage.getItem(LS_KEY) || "null");
+    if (o?.settings) settings = { ...defaultSettings, ...o.settings };
+    if (Array.isArray(o?.members)) members = o.members;
+  } catch {}
+}
 
-        function onYouTubeIframeAPIReady() {
-            const videoId = extractYouTubeID(gangSettings.ytUrl);
-            ytPlayer = new YT.Player('youtube-player', {
-                height: '0',
-                width: '0',
-                videoId: videoId || '',
-                playerVars: {
-                    'autoplay': 1,
-                    'controls': 0,
-                    'loop': 1,
-                    'playlist': videoId || ''
-                },
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
-            });
-        }
+/* ---------- persistence ---------- */
+async function persistMembers(){
+  if (fs) return fs.setDoc(fs.docRef("roster"), { list: members, updatedAt: Date.now() });
+  saveLocal();
+}
+async function persistSettings(){
+  if (fs) return fs.setDoc(fs.docRef("settings"), { value: settings, updatedAt: Date.now() });
+  saveLocal();
+}
+function onWriteError(e){
+  console.error(e);
+  toast("บันทึกไม่สำเร็จ: " + (e?.code || "error"));
+}
 
-        function onPlayerReady(event) {
-            if (gangSettings.ytUrl) {
-                event.target.playVideo();
-            }
-        }
+/* ---------- render ---------- */
+function applySettings(){
+  $("display-name").textContent = settings.name || "GANG";
 
-        function onPlayerStateChange(event) {
-            if (event.data === YT.PlayerState.PLAYING) {
-                isMusicPlaying = true;
-                document.getElementById('music-btn-text').innerText = "ปิดเพลง";
-                document.getElementById('music-toggle-btn').style.background = "var(--primary-gold)";
-                document.getElementById('music-toggle-btn').style.color = "#000";
-            } else {
-                isMusicPlaying = false;
-                document.getElementById('music-btn-text').innerText = "เล่นเพลง";
-                document.getElementById('music-toggle-btn').style.background = "rgba(223, 167, 81, 0.1)";
-                document.getElementById('music-toggle-btn').style.color = "var(--primary-gold)";
-            }
-        }
+  const wrap = $("display-logo-wrap");
+  const logo = safeUrl(settings.logo);
+  const initial = esc((settings.name || "G").charAt(0).toUpperCase());
+  if (logo){
+    wrap.innerHTML = "";
+    const im = document.createElement("img");
+    im.alt = "Gang Logo"; im.src = logo;
+    im.onerror = () => { wrap.innerHTML = "<span>" + initial + "</span>"; };
+    wrap.appendChild(im);
+  } else {
+    wrap.innerHTML = "<span>" + initial + "</span>";
+  }
 
-        function toggleMusic() {
-            if (!ytPlayer || typeof ytPlayer.playVideo !== 'function') return;
-            if (isMusicPlaying) {
-                ytPlayer.pauseVideo();
-            } else {
-                ytPlayer.playVideo();
-            }
-        }
+  const bg = safeUrl(settings.bgUrl);
+  document.body.style.backgroundImage = bg
+    ? `linear-gradient(rgba(10,10,12,.75),rgba(10,10,12,.85)), url('${bg.replace(/'/g,"%27")}')`
+    : "radial-gradient(circle at center, rgba(223,167,81,.1) 0%, transparent 70%)";
 
-        // --- 3. RENDER & DISPLAY FUNCTIONS ---
-        function applySettings() {
-            document.getElementById('display-name').innerText = gangSettings.name || "THE ROYAL GANG";
-            document.getElementById('display-logo').src = gangSettings.logo || "https://via.placeholder.com/150/000000/dfa751?text=GANG";
-            
-            if(gangSettings.bgUrl) {
-                document.body.style.backgroundImage = `linear-gradient(rgba(10, 10, 12, 0.75), rgba(10, 10, 12, 0.85)), url('${gangSettings.bgUrl}')`;
-            } else {
-                document.body.style.backgroundImage = `radial-gradient(circle at center, rgba(223, 167, 81, 0.1) 0%, transparent 70%)`;
-            }
+  $("set-gang-name").value = settings.name  || "";
+  $("set-gang-logo").value = settings.logo  || "";
+  $("set-bg-url").value    = settings.bgUrl || "";
+  $("set-yt-url").value    = settings.ytUrl || "";
 
-            // เติมค่าใส่ฟอร์มตั้งค่า
-            document.getElementById('set-gang-name').value = gangSettings.name || "";
-            document.getElementById('set-gang-logo').value = gangSettings.logo || "";
-            document.getElementById('set-bg-url').value = gangSettings.bgUrl || "";
-            document.getElementById('set-yt-url').value = gangSettings.ytUrl || "";
+  syncMusicButton();
+}
 
-            // อัปเดตเพลง YouTube
-            const videoId = extractYouTubeID(gangSettings.ytUrl);
-            if (ytPlayer && videoId && typeof ytPlayer.loadVideoById === 'function') {
-                ytPlayer.loadVideoById(videoId);
-            }
-        }
+function cardHTML(m){
+  const initial = esc((m.name || "?").charAt(0).toUpperCase());
+  const img = safeUrl(m.img);
+  const avatar = img
+    ? `<div class="avatar-wrap"><img src="${esc(img)}" alt="${esc(m.name)}" onerror="this.parentNode.innerHTML='${initial}'"></div>`
+    : `<div class="avatar-wrap">${initial}</div>`;
+  const actions = isAdmin
+    ? `<div class="member-actions">
+         <button class="btn-sm btn-edit" data-edit="${esc(m.id)}"><i class="fa-solid fa-pen"></i> แก้ไข</button>
+         <button class="btn-sm btn-delete" data-del="${esc(m.id)}"><i class="fa-solid fa-trash"></i> ลบ</button>
+       </div>`
+    : "";
+  return `<div class="member-card ${esc(m.role)}" data-search="${esc(((m.name||"")+" "+(m.alias||"")).toLowerCase())}">
+      <span class="role-badge badge-${esc(m.role)}">${esc(m.role)}</span>
+      ${avatar}
+      <div class="member-name">${esc(m.name)}</div>
+      <div class="member-alias">${esc(m.alias || "-")}</div>
+      ${actions}
+    </div>`;
+}
 
-        function renderMembers() {
-            const ownerGrid = document.getElementById('owner-grid');
-            const leaderGrid = document.getElementById('leader-grid');
-            const memberGrid = document.getElementById('member-grid');
+function renderMembers(){
+  const buckets = { owner:[], leader:[], member:[] };
+  for (const m of members){
+    if (!m?.name) continue;
+    const role = (m.role === "owner" || m.role === "leader") ? m.role : "member";
+    buckets[role].push(cardHTML({ ...m, role }));
+  }
+  for (const role of ["owner","leader","member"]){
+    $(role + "-grid").innerHTML = buckets[role].length
+      ? buckets[role].join("")
+      : '<div class="empty-note">— ยังไม่มีรายชื่อในหมวดนี้ —</div>';
+  }
+  filterMembers();
+}
 
-            ownerGrid.innerHTML = '';
-            leaderGrid.innerHTML = '';
-            memberGrid.innerHTML = '';
+function filterMembers(){
+  const q = $("searchInput").value.toLowerCase().trim();
+  document.querySelectorAll(".member-card").forEach(card => {
+    card.style.display = (!q || card.dataset.search.includes(q)) ? "" : "none";
+  });
+}
 
-            members.forEach((m, index) => {
-                const defaultImg = `https://via.placeholder.com/150/111/fff?text=${m.name ? m.name.charAt(0) : 'M'}`;
-                const imgSrc = m.img ? m.img : defaultImg;
-                
-                const cardHTML = `
-                    <div class="member-card ${m.role}">
-                        <span class="role-badge badge-${m.role}">${m.role}</span>
-                        <img src="${imgSrc}" class="avatar" onerror="this.src='${defaultImg}'" alt="${m.name}">
-                        <div class="member-name">${m.name}</div>
-                        <div class="member-alias">${m.alias || '-'}</div>
-                        ${isAdminLoggedIn ? `
-                            <div class="member-actions">
-                                <button class="btn-sm btn-edit" onclick="editMember(${index})"><i class="fa-solid fa-pen"></i> แก้ไข</button>
-                                <button class="btn-sm btn-delete" onclick="deleteMember(${index})"><i class="fa-solid fa-trash"></i> ลบ</button>
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
+/* ---------- music ---------- */
+function extractYouTubeID(url){
+  const m = String(url || "").match(/^.*(?:youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/);
+  return (m && m[1]?.length === 11) ? m[1] : null;
+}
+function syncMusicButton(){
+  const id = extractYouTubeID(settings.ytUrl);
+  $("music-toggle-btn").style.display = id ? "" : "none";
+  if (!id && musicOn) setMusic(false);
+}
+function setMusic(on){
+  const id = extractYouTubeID(settings.ytUrl);
+  musicOn = !!(on && id);
+  const holder = $("music-frame");
+  holder.innerHTML = "";
+  if (musicOn){
+    const f = document.createElement("iframe");
+    f.width = "1"; f.height = "1"; f.allow = "autoplay";
+    f.src = `https://www.youtube.com/embed/${id}?autoplay=1&loop=1&playlist=${id}`;
+    holder.appendChild(f);
+  }
+  $("music-btn-text").textContent = musicOn ? "ปิดเพลง" : "เล่นเพลง";
+  $("music-toggle-btn").classList.toggle("on", musicOn);
+}
 
-                if (m.role === 'owner') ownerGrid.innerHTML += cardHTML;
-                else if (m.role === 'leader') leaderGrid.innerHTML += cardHTML;
-                else memberGrid.innerHTML += cardHTML;
-            });
-        }
+/* ---------- modals / tabs ---------- */
+const openModal  = id => $(id).classList.add("open");
+const closeModal = id => $(id).classList.remove("open");
+function switchTab(tabId){
+  document.querySelectorAll(".tab-content").forEach(el => el.classList.toggle("active", el.id === tabId));
+  document.querySelectorAll(".tab-btn").forEach(el => el.classList.toggle("active", el.dataset.tab === tabId));
+}
+function resetMemberForm(){
+  $("memberForm").reset();
+  $("edit-id").value = "";
+  $("form-title").textContent = "เพิ่มรายชื่อใหม่";
+  $("btn-save-member").textContent = "บันทึกข้อมูล";
+  $("btn-cancel-edit").style.display = "none";
+}
 
-        // --- 4. SEARCH & FILTER ---
-        function filterMembers() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.member-card');
+/* ---------- admin actions ---------- */
+async function saveMember(e){
+  e.preventDefault();
+  const btn = $("btn-save-member");
+  btn.disabled = true;
+  try {
+    const id = $("edit-id").value;
+    const data = {
+      id: id || newId(),
+      name:  $("m-name").value.trim(),
+      alias: $("m-alias").value.trim(),
+      role:  $("m-role").value,
+      img:   $("m-img").value.trim()
+    };
+    if (!data.name) return;
 
-            cards.forEach(card => {
-                const name = card.querySelector('.member-name').innerText.toLowerCase();
-                const alias = card.querySelector('.member-alias').innerText.toLowerCase();
-                
-                if (name.includes(query) || alias.includes(query)) {
-                    card.style.display = "block";
-                } else {
-                    card.style.display = "none";
-                }
-            });
-        }
+    const i = id ? members.findIndex(m => m.id === id) : -1;
+    if (i > -1) members[i] = data; else members.push(data);
 
-        // --- 5. AUTHENTICATION (LOGIN) ---
-        function openLoginModal() {
-            if (isAdminLoggedIn) {
-                openModal('adminModal');
-            } else {
-                openModal('loginModal');
-            }
-        }
+    renderMembers();
+    await persistMembers();
+    resetMemberForm();
+    toast(fs ? "บันทึกแล้ว ทุกเครื่องจะเห็นตรงกัน" : "บันทึกแล้ว (เฉพาะเครื่องนี้)");
+  } catch(err){ onWriteError(err); }
+  finally { btn.disabled = false; }
+}
 
-        function handleLogin(e) {
-            e.preventDefault();
-            const pass = document.getElementById('adminPassword').value;
-            if (pass === DEFAULT_PASS) {
-                isAdminLoggedIn = true;
-                closeModal('loginModal');
-                document.getElementById('adminPassword').value = '';
-                document.getElementById('admin-btn-text').innerText = "ADMIN PANEL";
-                alert("เข้าสู่ระบบ Admin สำเร็จ!");
-                renderMembers();
-                openModal('adminModal');
-            } else {
-                alert("รหัสผ่านไม่ถูกต้อง!");
-            }
-        }
+function editMember(id){
+  const m = members.find(x => x.id === id);
+  if (!m) return;
+  $("edit-id").value = m.id;
+  $("m-name").value  = m.name  || "";
+  $("m-alias").value = m.alias || "";
+  $("m-role").value  = m.role  || "member";
+  $("m-img").value   = m.img   || "";
+  $("form-title").textContent = "แก้ไขข้อมูลสมาชิก";
+  $("btn-save-member").textContent = "อัปเดตสมาชิก";
+  $("btn-cancel-edit").style.display = "";
+  switchTab("add-tab");
+  openModal("adminModal");
+}
 
-        // --- 6. MEMBER MANAGEMENT (ADD/EDIT/DELETE) ---
-        function saveMember(e) {
-            e.preventDefault();
-            const index = document.getElementById('edit-index').value;
-            const name = document.getElementById('m-name').value;
-            const alias = document.getElementById('m-alias').value;
-            const role = document.getElementById('m-role').value;
-            const img = document.getElementById('m-img').value;
+async function deleteMember(id){
+  const m = members.find(x => x.id === id);
+  if (!m || !confirm(`คุณต้องการลบ "${m.name}" ออกจากแก๊งหรือไม่?`)) return;
+  members = members.filter(x => x.id !== id);
+  renderMembers();
+  try { await persistMembers(); toast("ลบสมาชิกแล้ว"); }
+  catch(err){ onWriteError(err); }
+}
 
-            const memberData = { name, alias, role, img };
+async function saveSettings(e){
+  e.preventDefault();
+  settings.name  = $("set-gang-name").value.trim() || "GANG";
+  settings.logo  = $("set-gang-logo").value.trim();
+  settings.bgUrl = $("set-bg-url").value.trim();
+  settings.ytUrl = $("set-yt-url").value.trim();
+  applySettings();
+  try {
+    await persistSettings();
+    toast(fs ? "อัปเดตแล้ว ทุกเครื่องจะเห็นตรงกัน" : "อัปเดตแล้ว (เฉพาะเครื่องนี้)");
+  } catch(err){ onWriteError(err); }
+}
 
-            if (index === "-1") {
-                members.push(memberData);
-            } else {
-                members[index] = memberData;
-                document.getElementById('edit-index').value = "-1";
-                document.getElementById('form-title').innerText = "เพิ่มรายชื่อใหม่";
-                document.getElementById('btn-save-member').innerText = "บันทึกข้อมูล";
-            }
+/* ---------- events ---------- */
+$("searchInput").addEventListener("input", filterMembers);
+$("music-toggle-btn").addEventListener("click", () => setMusic(!musicOn));
+$("admin-main-btn").addEventListener("click", () => openModal(isAdmin ? "adminModal" : "loginModal"));
+$("loginForm").addEventListener("submit", e => {
+  e.preventDefault();
+  if ($("adminPassword").value === ADMIN_PASS){
+    isAdmin = true;
+    $("adminPassword").value = "";
+    closeModal("loginModal");
+    $("admin-btn-text").textContent = "ADMIN PANEL";
+    renderMembers();
+    openModal("adminModal");
+  } else toast("รหัสผ่านไม่ถูกต้อง!");
+});
+$("memberForm").addEventListener("submit", saveMember);
+$("settingsForm").addEventListener("submit", saveSettings);
+$("btn-cancel-edit").addEventListener("click", resetMemberForm);
+document.querySelectorAll(".close-btn").forEach(el => el.addEventListener("click", () => closeModal(el.dataset.close)));
+document.querySelectorAll(".tab-btn").forEach(el => el.addEventListener("click", () => switchTab(el.dataset.tab)));
+document.querySelectorAll(".modal").forEach(el => el.addEventListener("click", ev => { if (ev.target === el) el.classList.remove("open"); }));
+document.addEventListener("click", ev => {
+  const t = ev.target.closest?.("[data-edit],[data-del]");
+  if (!t) return;
+  if (t.dataset.edit) editMember(t.dataset.edit);
+  if (t.dataset.del)  deleteMember(t.dataset.del);
+});
 
-            // บันทึกขึ้น Firebase Realtime Database
-            db.ref('gangData/members').set(members).then(() => {
-                document.getElementById('memberForm').reset();
-                alert("บันทึกข้อมูลสมาชิกเรียบร้อย!");
-            });
-        }
+/* ---------- boot ---------- */
+loadLocal();
+applySettings();
+renderMembers();
 
-        function editMember(index) {
-            const m = members[index];
-            document.getElementById('edit-index').value = index;
-            document.getElementById('m-name').value = m.name;
-            document.getElementById('m-alias').value = m.alias;
-            document.getElementById('m-role').value = m.role;
-            document.getElementById('m-img').value = m.img;
+if (!FIREBASE_CONFIG.projectId){
+  setSync("local", "โหมดเครื่องเดียว: ยังไม่ได้ใส่ค่า Firebase ในโค้ด");
+} else {
+  connectFirebase().catch(err => {
+    console.error(err);
+    setSync("local", "เชื่อมต่อฐานข้อมูลไม่สำเร็จ ใช้ข้อมูลในเครื่องแทน");
+  });
+}
 
-            document.getElementById('form-title').innerText = "แก้ไขข้อมูลสมาชิก";
-            document.getElementById('btn-save-member').innerText = "อัปเดตสมาชิก";
-            
-            switchTab('add-tab');
-        }
+async function connectFirebase(){
+  setSync("", "กำลังเชื่อมต่อฐานข้อมูล...");
+  const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+  const { getFirestore, doc, setDoc, onSnapshot } =
+    await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
 
-        function deleteMember(index) {
-            if (confirm(`คุณต้องการลบ "${members[index].name}" ออกจากแก๊งหรือไม่?`)) {
-                members.splice(index, 1);
-                // บันทึกขึ้น Firebase Realtime Database
-                db.ref('gangData/members').set(members);
-            }
-        }
+  const app = initializeApp(FIREBASE_CONFIG);
+  const store = getFirestore(app);
 
-        // --- 7. SETTINGS MANAGEMENT ---
-        function saveSettings(e) {
-            e.preventDefault();
-            gangSettings.name = document.getElementById('set-gang-name').value;
-            gangSettings.logo = document.getElementById('set-gang-logo').value;
-            gangSettings.bgUrl = document.getElementById('set-bg-url').value;
-            gangSettings.ytUrl = document.getElementById('set-yt-url').value;
+  fs = {
+    docRef: name => doc(store, "gangsites", SITE_ID + "_" + name),
+    setDoc
+  };
 
-            // บันทึกขึ้น Firebase Realtime Database
-            db.ref('gangData/settings').set(gangSettings).then(() => {
-                alert("อัปเดตการตกแต่งเว็บสำเร็จ!");
-            });
-        }
+  setSync("online", "เชื่อมต่อฐานข้อมูลแล้ว ทุกเครื่องเห็นข้อมูลชุดเดียวกัน");
 
-        // --- 8. MODALS & TABS HELPERS ---
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+  onSnapshot(fs.docRef("settings"), snap => {
+    const v = snap.exists() ? snap.data().value : null;
+    if (v){ settings = { ...defaultSettings, ...v }; applySettings(); saveLocal(); }
+  }, () => setSync("local", "การเชื่อมต่อขัดข้อง"));
 
-        function switchTab(tabId, evt) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById(tabId).classList.add('active');
-            if (evt) {
-                evt.currentTarget.classList.add('active');
-            } else {
-                document.querySelector(`.tab-btn[onclick*="${tabId}"]`).classList.add('active');
-            }
-        }
-    </script>
+  onSnapshot(fs.docRef("roster"), snap => {
+    const list = snap.exists() ? snap.data().list : null;
+    if (Array.isArray(list)){
+      members = list.map(m => ({ id: m.id || newId(), name:m.name, alias:m.alias, role:m.role, img:m.img }));
+      renderMembers();
+      saveLocal();
+    } else if (!seeded){
+      seeded = true;
+      persistMembers().catch(console.error);
+    }
+  }, () => setSync("local", "การเชื่อมต่อขัดข้อง"));
+}
+</script>
 </body>
 </html>
