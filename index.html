@@ -1,314 +1,780 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discord Bot Dashboard</title>
-<style>
-  :root {
-    --bg: #0f1115;
-    --card: #1a1d24;
-    --accent: #5865F2;
-    --text: #e6e6e6;
-    --muted: #9aa0ac;
-    --border: #2a2e37;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    padding: 24px;
-  }
-  .container { max-width: 900px; margin: 0 auto; }
-  h1 { font-size: 22px; margin-bottom: 4px; }
-  p.subtitle { color: var(--muted); margin-top: 0; font-size: 14px; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GANG ROSTER - MANAGEMENT</title>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-gold: #dfa751;
+            --gold-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            --gold-shine: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            --bg-dark: #0a0a0c; 
+            --card-bg: rgba(18, 18, 24, 0.75);
+            --card-border: rgba(223, 167, 81, 0.3);
+            --text-light: #f1f1f1;
+        }
 
-  .warning {
-    background: #2b1d1d;
-    border: 1px solid #5c2b2b;
-    color: #ffb3b3;
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-size: 13px;
-    margin-bottom: 20px;
-    line-height: 1.5;
-  }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Kanit', sans-serif;
+        }
 
-  .token-box {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 24px;
-  }
-  input[type="password"], input[type="text"] {
-    flex: 1;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: #12141a;
-    color: var(--text);
-    font-size: 14px;
-  }
-  button {
-    background: var(--accent);
-    border: none;
-    color: white;
-    padding: 10px 18px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-  }
-  button:hover { opacity: 0.9; }
-  button:disabled { opacity: 0.5; cursor: not-allowed; }
+        body {
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at center, rgba(223, 167, 81, 0.1) 0%, transparent 70%);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-light);
+            min-height: 100vh;
+            padding-bottom: 50px;
+            transition: background-image 0.5s ease;
+        }
 
-  .bot-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 20px;
-    margin-bottom: 20px;
-  }
-  .bot-header img {
-    width: 56px; height: 56px; border-radius: 50%;
-  }
-  .bot-header .name { font-size: 18px; font-weight: 700; }
-  .bot-header .tag { color: var(--muted); font-size: 13px; }
+        /* Header & Navbar */
+        header {
+            background: rgba(10, 10, 12, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 14px;
-    margin-bottom: 24px;
-  }
-  .stat-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    text-align: center;
-  }
-  .stat-card .num { font-size: 26px; font-weight: 700; color: var(--accent); }
-  .stat-card .label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+        .gang-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-  h2 { font-size: 16px; margin: 24px 0 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+        .gang-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-gold);
+            box-shadow: 0 0 10px rgba(223, 167, 81, 0.5);
+        }
 
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
-  th { color: var(--muted); font-weight: 600; }
+        .gang-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gold-shine);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
 
-  .tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
-  .tag { background: #22252e; border: 1px solid var(--border); padding: 4px 10px; border-radius: 999px; font-size: 12px; }
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-  #error { color: #ff8080; font-size: 14px; margin-top: 8px; display: none; }
-  #loading { color: var(--muted); font-size: 14px; display: none; }
-  #result { display: none; }
-</style>
+        .btn-music-toggle {
+            background: rgba(223, 167, 81, 0.1);
+            color: var(--primary-gold);
+            border: 1px solid var(--primary-gold);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-music-toggle:hover {
+            background: var(--primary-gold);
+            color: #000;
+        }
+
+        .btn-admin {
+            background: transparent;
+            color: var(--primary-gold);
+            border: 1px solid var(--primary-gold);
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-admin:hover {
+            background: var(--primary-gold);
+            color: #000;
+            box-shadow: 0 0 15px rgba(223, 167, 81, 0.6);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Search & Filter Controls */
+        .controls {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--card-border);
+            border-radius: 25px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            backdrop-filter: blur(5px);
+            transition: 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 10px rgba(223, 167, 81, 0.4);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-gold);
+        }
+
+        /* Roster Sections */
+        .section-title {
+            font-size: 1.5rem;
+            margin: 40px 0 20px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid var(--card-border);
+            padding-bottom: 8px;
+            color: var(--primary-gold);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        /* Member Card Design */
+        .member-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(223, 167, 81, 0.2);
+        }
+
+        .member-card.owner { border-color: #ff3e3e; }
+        .member-card.leader { border-color: #3e8bff; }
+        .member-card.member { border-color: var(--card-border); }
+
+        .role-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .badge-owner { background: rgba(255, 62, 62, 0.2); color: #ff5555; border: 1px solid #ff5555; }
+        .badge-leader { background: rgba(62, 139, 255, 0.2); color: #5599ff; border: 1px solid #5599ff; }
+        .badge-member { background: rgba(223, 167, 81, 0.2); color: var(--primary-gold); border: 1px solid var(--primary-gold); }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 10px auto 15px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .member-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .member-alias {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-bottom: 15px;
+        }
+
+        .member-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-sm {
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-edit { background: #ffb703; color: #000; }
+        .btn-delete { background: #e63946; color: #fff; }
+
+        /* Modal Popup System */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #15151c;
+            border: 1px solid var(--primary-gold);
+            width: 90%;
+            max-width: 500px;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 25px rgba(223, 167, 81, 0.3);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 1.5rem;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--primary-gold);
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            background: #0a0a0c;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary-gold);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background: var(--gold-shine);
+            border: none;
+            color: #000;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .admin-panel-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #aaa;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-gold);
+            border-bottom: 2px solid var(--primary-gold);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* ซ่อนเครื่องเล่นเพลง YouTube ไว้เบื้องหลัง */
+        #music-player-container {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            left: -9999px;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <h1>🤖 Discord Bot Dashboard</h1>
-  <p class="subtitle">กรอกโทเค่นบอทเพื่อดูสถิติและความสามารถของบอท (ประมวลผลในเบราว์เซอร์เท่านั้น)</p>
 
-  <div class="warning">
-    ⚠️ โทเค่นจะถูกส่งตรงจากเบราว์เซอร์คุณไปยัง Discord API เท่านั้น หน้านี้ไม่มีการเก็บหรือส่งโทเค่นไปเซิร์ฟเวอร์อื่นใด
-    แต่ควรใช้กับโทเค่นบอทของตัวเองเท่านั้น และไม่ควรแชร์ลิงก์เว็บนี้ให้ผู้อื่นกรอกโทเค่นของเขา
-  </div>
+    <!-- Header Navbar -->
+    <header>
+        <div class="gang-brand">
+            <img id="display-logo" class="gang-logo" src="https://via.placeholder.com/150/000000/dfa751?text=GANG" alt="Gang Logo">
+            <h1 id="display-name" class="gang-title">THE ROYAL GANG</h1>
+        </div>
+        <div class="header-controls">
+            <!-- ปุ่มควบคุมการเปิด/ปิดเพลง -->
+            <button class="btn-music-toggle" id="music-toggle-btn" onclick="toggleMusic()">
+                <i class="fa-solid fa-music"></i> <span id="music-btn-text">เล่นเพลง</span>
+            </button>
+            <button class="btn-admin" id="admin-main-btn" onclick="openLoginModal()">
+                <i class="fa-solid fa-lock"></i> <span id="admin-btn-text">ADMIN MENU</span>
+            </button>
+        </div>
+    </header>
 
-  <div class="token-box">
-    <input type="password" id="tokenInput" placeholder="วางโทเค่นบอทที่นี่ (Bot Token)">
-    <button id="loadBtn" onclick="loadDashboard()">โหลดข้อมูล</button>
-  </div>
+    <!-- Main Content Container -->
+    <div class="container">
+        <!-- Search Bar -->
+        <div class="controls">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" onkeyup="filterMembers()" placeholder="ค้นหาชื่อสมาชิก หรือ ฉายาในเกม...">
+            </div>
+        </div>
 
-  <div id="loading">⏳ กำลังดึงข้อมูลจาก Discord...</div>
-  <div id="error"></div>
+        <!-- OWNER SECTION -->
+        <div class="section-title"><i class="fa-solid fa-crown"></i> GANG OWNER</div>
+        <div class="grid-container" id="owner-grid"></div>
 
-  <div id="result">
-    <div class="bot-header" id="botHeader"></div>
+        <!-- LEADER SECTION -->
+        <div class="section-title"><i class="fa-solid fa-shield-halved"></i> GANG LEADER</div>
+        <div class="grid-container" id="leader-grid"></div>
 
-    <div class="stats-grid" id="statsGrid"></div>
+        <!-- MEMBER SECTION -->
+        <div class="section-title"><i class="fa-solid fa-users"></i> GANG MEMBER</div>
+        <div class="grid-container" id="member-grid"></div>
+    </div>
 
-    <h2>เซิร์ฟเวอร์ที่บอทอยู่</h2>
-    <table>
-      <thead><tr><th>ชื่อเซิร์ฟเวอร์</th><th>สมาชิก (ประมาณ)</th><th>ออนไลน์ (ประมาณ)</th></tr></thead>
-      <tbody id="guildTableBody"></tbody>
-    </table>
+    <!-- 1. LOGIN MODAL -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('loginModal')">&times;</span>
+            <h2 style="color: var(--primary-gold); text-align: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-shield-cat"></i> เข้าสู่ระบบ ADMIN
+            </h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>รหัสผ่าน (Default: 5720)</label>
+                    <input type="password" id="adminPassword" placeholder="กรอกรหัสผ่านเพื่อจัดการเว็บ..." required>
+                </div>
+                <button type="submit" class="btn-submit">LOGIN</button>
+            </form>
+        </div>
+    </div>
 
-    <h2>Slash Commands ที่บอทมี</h2>
-    <div id="commandsList" class="tag-list"></div>
+    <!-- 2. ADMIN CONTROL PANEL MODAL -->
+    <div class="modal" id="adminModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('adminModal')">&times;</span>
+            
+            <div class="admin-panel-tabs">
+                <button class="tab-btn active" onclick="switchTab('add-tab', event)">เพิ่มสมาชิก</button>
+                <button class="tab-btn" onclick="switchTab('style-tab', event)">ตกแต่งเว็บไซต์</button>
+            </div>
 
-    <h2>Intents / ความสามารถ</h2>
-    <div id="intentsList" class="tag-list"></div>
-  </div>
-</div>
+            <!-- Tab 1: เพิ่ม/แก้ไขสมาชิก -->
+            <div id="add-tab" class="tab-content active">
+                <h3 id="form-title" style="color: #fff; margin-bottom: 15px;">เพิ่มรายชื่อใหม่</h3>
+                <form id="memberForm" onsubmit="saveMember(event)">
+                    <input type="hidden" id="edit-index" value="-1">
+                    <div class="form-group">
+                        <label>ชื่อสมาชิก / Nickname</label>
+                        <input type="text" id="m-name" placeholder="เช่น Alex" required>
+                    </div>
+                    <div class="form-group">
+                        <label>ฉายา / ตำแหน่งย่อย</label>
+                        <input type="text" id="m-alias" placeholder="เช่น สายบวกหลัก / หมอประจำแก๊ง">
+                    </div>
+                    <div class="form-group">
+                        <label>ระดับ / ตำแหน่งหลัก</label>
+                        <select id="m-role">
+                            <option value="owner">Owner (หัวหน้าใหญ่)</option>
+                            <option value="leader">Leader (รองหัวหน้า/สภา)</option>
+                            <option value="member" selected>Member (สมาชิก)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>URL รูปภาพโปรไฟล์</label>
+                        <input type="url" id="m-img" placeholder="https://example.com/image.jpg">
+                    </div>
+                    <button type="submit" class="btn-submit" id="btn-save-member">บันทึกข้อมูล</button>
+                </form>
+            </div>
 
-<script>
-const API = "https://discord.com/api/v10";
+            <!-- Tab 2: ตกแต่งเว็บไซต์ -->
+            <div id="style-tab" class="tab-content">
+                <h3 style="color: #fff; margin-bottom: 15px;">ตั้งค่ารูปร่างหน้าตาเว็บ</h3>
+                <form onsubmit="saveSettings(event)">
+                    <div class="form-group">
+                        <label>ชื่อแก๊ง (Gang Name)</label>
+                        <input type="text" id="set-gang-name">
+                    </div>
+                    <div class="form-group">
+                        <label>URL โลโก้แก๊ง</label>
+                        <input type="url" id="set-gang-logo">
+                    </div>
+                    <div class="form-group">
+                        <label>URL ภาพพื้นหลังเว็บไซต์ (Background Image)</label>
+                        <input type="url" id="set-bg-url" placeholder="ใส่ ลิงก์รูปภาพ เช่น https://site.com/bg.jpg">
+                    </div>
+                    <!-- ช่องใส่ลิงก์ YouTube -->
+                    <div class="form-group">
+                        <label><i class="fa-brands fa-youtube" style="color: #ff0000;"></i> ลิงก์เพลง YouTube (YouTube Video URL)</label>
+                        <input type="url" id="set-yt-url" placeholder="เช่น https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+                    </div>
+                    <button type="submit" class="btn-submit">อัปเดตการตกแต่ง</button>
+                </form>
+            </div>
 
-async function apiGet(path, token) {
-  const res = await fetch(API + path, {
-    headers: { "Authorization": "Bot " + token }
-  });
-  if (!res.ok) {
-    const body = await res.text().catch(() => "");
-    throw new Error(`(${res.status}) เรียก ${path} ไม่สำเร็จ: ${body}`);
-  }
-  return res.json();
-}
+        </div>
+    </div>
 
-// Discord application flag bits → human-readable intents/capabilities
-const APP_FLAGS = [
-  [1 << 12, "Gateway Presence Intent (limited)"],
-  [1 << 13, "Gateway Presence Intent"],
-  [1 << 14, "Gateway Guild Members Intent (limited)"],
-  [1 << 15, "Gateway Guild Members Intent"],
-  [1 << 18, "Gateway Message Content Intent (limited)"],
-  [1 << 19, "Gateway Message Content Intent"],
-  [1 << 23, "Application Commands Badge"],
-];
+    <!-- Container สำหรับซ่อนเครื่องเล่น YouTube -->
+    <div id="music-player-container">
+        <div id="youtube-player"></div>
+    </div>
 
-function el(tag, cls, text) {
-  const e = document.createElement(tag);
-  if (cls) e.className = cls;
-  if (text !== undefined) e.textContent = text;
-  return e;
-}
+    <!-- โหลด YouTube Iframe Player API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
 
-async function loadDashboard() {
-  const token = document.getElementById('tokenInput').value.trim();
-  const errorBox = document.getElementById('error');
-  const loading = document.getElementById('loading');
-  const result = document.getElementById('result');
-  const btn = document.getElementById('loadBtn');
+    <!-- JavaScript Logic -->
+    <script>
+        // --- 1. DEFAULT DATA & INITIALIZATION ---
+        const DEFAULT_PASS = "5720";
+        let isAdminLoggedIn = false;
+        let ytPlayer = null;
+        let isMusicPlaying = false;
 
-  errorBox.style.display = 'none';
-  result.style.display = 'none';
+        // โหลดข้อมูลจาก LocalStorage หรือใช้ค่าเริ่มต้น
+        let gangSettings = JSON.parse(localStorage.getItem('gangSettings')) || {
+            name: "THE ROYAL GANG",
+            logo: "https://via.placeholder.com/150/000000/dfa751?text=GANG",
+            bgUrl: "",
+            ytUrl: ""
+        };
 
-  if (!token) {
-    errorBox.textContent = "กรุณากรอกโทเค่นบอทก่อน";
-    errorBox.style.display = 'block';
-    return;
-  }
+        let members = JSON.parse(localStorage.getItem('gangMembers')) || [
+            { name: "Vito Corleone", alias: "Godfather", role: "owner", img: "https://i.pravatar.cc/150?img=11" },
+            { name: "Sonny Corleone", alias: "Underboss", role: "leader", img: "https://i.pravatar.cc/150?img=12" },
+            { name: "Tom Hagen", alias: "Consigliere", role: "leader", img: "https://i.pravatar.cc/150?img=13" },
+            { name: "Paulie Gatto", alias: "Soldier", role: "member", img: "https://i.pravatar.cc/150?img=14" }
+        ];
 
-  loading.style.display = 'block';
-  btn.disabled = true;
+        // เรียกใช้งานฟังก์ชันเมื่อเปิดหน้าเว็บ
+        window.onload = function() {
+            applySettings();
+            renderMembers();
 
-  try {
-    // 1. Bot user info
-    const me = await apiGet('/users/@me', token);
+            // ปลดล็อค Autoplay เมื่อผู้ใช้นับการกดคลิกแรกในหน้าเว็บ (เบราว์เซอร์ส่วนใหญ่บล็อก Autoplay Audio ไว้)
+            document.body.addEventListener('click', function unlockAutoplay() {
+                if (ytPlayer && typeof ytPlayer.playVideo === 'function' && !isMusicPlaying) {
+                    ytPlayer.playVideo();
+                }
+                document.body.removeEventListener('click', unlockAutoplay);
+            }, { once: true });
+        };
 
-    // 2. Application info (for flags/name/description)
-    const app = await apiGet('/oauth2/applications/@me', token);
+        // --- 2. YOUTUBE API & MUSIC LOGIC ---
+        // สกัด Video ID ออกจาก URL ของ YouTube
+        function extractYouTubeID(url) {
+            if (!url) return null;
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
 
-    // 3. Guild list (bot is in)
-    const guilds = await apiGet('/users/@me/guilds', token);
+        // ฟังก์ชันตามมาตรฐาน YouTube API จะถูกเรียกใช้อัตโนมัติเมื่อ API พร้อม
+        function onYouTubeIframeAPIReady() {
+            const videoId = extractYouTubeID(gangSettings.ytUrl);
+            ytPlayer = new YT.Player('youtube-player', {
+                height: '0',
+                width: '0',
+                videoId: videoId || '',
+                playerVars: {
+                    'autoplay': 1,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': videoId || ''
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
 
-    // 4. Per-guild counts (with_counts=true)
-    const guildDetails = await Promise.all(
-      guilds.map(g =>
-        apiGet(`/guilds/${g.id}?with_counts=true`, token).catch(() => null)
-      )
-    );
+        function onPlayerReady(event) {
+            if (gangSettings.ytUrl) {
+                event.target.playVideo();
+            }
+        }
 
-    // 5. Global slash commands
-    let commands = [];
-    try {
-      commands = await apiGet(`/applications/${app.id}/commands`, token);
-    } catch (e) { /* ignore if none / no perms */ }
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                isMusicPlaying = true;
+                document.getElementById('music-btn-text').innerText = "ปิดเพลง";
+                document.getElementById('music-toggle-btn').style.background = "var(--primary-gold)";
+                document.getElementById('music-toggle-btn').style.color = "#000";
+            } else {
+                isMusicPlaying = false;
+                document.getElementById('music-btn-text').innerText = "เล่นเพลง";
+                document.getElementById('music-toggle-btn').style.background = "rgba(223, 167, 81, 0.1)";
+                document.getElementById('music-toggle-btn').style.color = "var(--primary-gold)";
+            }
+        }
 
-    // ---- Render bot header ----
-    const avatarUrl = me.avatar
-      ? `https://cdn.discordapp.com/avatars/${me.id}/${me.avatar}.png?size=128`
-      : `https://cdn.discordapp.com/embed/avatars/0.png`;
+        function toggleMusic() {
+            if (!ytPlayer || typeof ytPlayer.playVideo !== 'function') return;
+            if (isMusicPlaying) {
+                ytPlayer.pauseVideo();
+            } else {
+                ytPlayer.playVideo();
+            }
+        }
 
-    const header = document.getElementById('botHeader');
-    header.innerHTML = '';
-    const img = document.createElement('img');
-    img.src = avatarUrl;
-    header.appendChild(img);
-    const infoDiv = document.createElement('div');
-    const nameEl = el('div', 'name', `${me.username}${me.discriminator && me.discriminator !== '0' ? '#' + me.discriminator : ''}`);
-    const tagEl = el('div', 'tag', app.description || 'ไม่มีคำอธิบาย');
-    infoDiv.appendChild(nameEl);
-    infoDiv.appendChild(tagEl);
-    header.appendChild(infoDiv);
+        // --- 3. RENDER & DISPLAY FUNCTIONS ---
+        function applySettings() {
+            document.getElementById('display-name').innerText = gangSettings.name;
+            document.getElementById('display-logo').src = gangSettings.logo;
+            
+            if(gangSettings.bgUrl) {
+                document.body.style.backgroundImage = `linear-gradient(rgba(10, 10, 12, 0.75), rgba(10, 10, 12, 0.85)), url('${gangSettings.bgUrl}')`;
+            }
 
-    // ---- Stats ----
-    let totalMembers = 0;
-    let totalOnline = 0;
-    guildDetails.forEach(g => {
-      if (g) {
-        totalMembers += g.approximate_member_count || 0;
-        totalOnline += g.approximate_presence_count || 0;
-      }
-    });
+            // เติมค่าใส่ฟอร์มตั้งค่า
+            document.getElementById('set-gang-name').value = gangSettings.name;
+            document.getElementById('set-gang-logo').value = gangSettings.logo;
+            document.getElementById('set-bg-url').value = gangSettings.bgUrl || "";
+            document.getElementById('set-yt-url').value = gangSettings.ytUrl || "";
+        }
 
-    const statsGrid = document.getElementById('statsGrid');
-    statsGrid.innerHTML = '';
-    const stats = [
-      { num: guilds.length, label: 'เซิร์ฟเวอร์ทั้งหมด' },
-      { num: totalMembers.toLocaleString(), label: 'สมาชิกรวม (ประมาณ)' },
-      { num: totalOnline.toLocaleString(), label: 'ออนไลน์รวม (ประมาณ)' },
-      { num: commands.length, label: 'Slash Commands' },
-    ];
-    stats.forEach(s => {
-      const card = el('div', 'stat-card');
-      card.appendChild(el('div', 'num', String(s.num)));
-      card.appendChild(el('div', 'label', s.label));
-      statsGrid.appendChild(card);
-    });
+        function renderMembers() {
+            const ownerGrid = document.getElementById('owner-grid');
+            const leaderGrid = document.getElementById('leader-grid');
+            const memberGrid = document.getElementById('member-grid');
 
-    // ---- Guild table ----
-    const tbody = document.getElementById('guildTableBody');
-    tbody.innerHTML = '';
-    guilds.forEach((g, i) => {
-      const detail = guildDetails[i];
-      const tr = document.createElement('tr');
-      tr.appendChild(el('td', null, g.name));
-      tr.appendChild(el('td', null, detail ? (detail.approximate_member_count ?? '-').toLocaleString() : '-'));
-      tr.appendChild(el('td', null, detail ? (detail.approximate_presence_count ?? '-').toLocaleString() : '-'));
-      tbody.appendChild(tr);
-    });
+            ownerGrid.innerHTML = '';
+            leaderGrid.innerHTML = '';
+            memberGrid.innerHTML = '';
 
-    // ---- Commands ----
-    const cmdList = document.getElementById('commandsList');
-    cmdList.innerHTML = '';
-    if (commands.length === 0) {
-      cmdList.appendChild(el('div', null, 'ไม่พบ Slash Command (หรือบอทยังไม่ได้ลงทะเบียนคำสั่ง)'));
-    } else {
-      commands.forEach(c => {
-        cmdList.appendChild(el('span', 'tag', `/${c.name} — ${c.description || ''}`));
-      });
-    }
+            members.forEach((m, index) => {
+                const defaultImg = `https://via.placeholder.com/150/111/fff?text=${m.name.charAt(0)}`;
+                const imgSrc = m.img ? m.img : defaultImg;
+                
+                const cardHTML = `
+                    <div class="member-card ${m.role}">
+                        <span class="role-badge badge-${m.role}">${m.role}</span>
+                        <img src="${imgSrc}" class="avatar" onerror="this.src='${defaultImg}'" alt="${m.name}">
+                        <div class="member-name">${m.name}</div>
+                        <div class="member-alias">${m.alias || '-'}</div>
+                        ${isAdminLoggedIn ? `
+                            <div class="member-actions">
+                                <button class="btn-sm btn-edit" onclick="editMember(${index})"><i class="fa-solid fa-pen"></i> แก้ไข</button>
+                                <button class="btn-sm btn-delete" onclick="deleteMember(${index})"><i class="fa-solid fa-trash"></i> ลบ</button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
 
-    // ---- Intents / flags ----
-    const intentsList = document.getElementById('intentsList');
-    intentsList.innerHTML = '';
-    const flags = app.flags || 0;
-    let found = false;
-    for (const [bit, label] of APP_FLAGS) {
-      if (flags & bit) {
-        intentsList.appendChild(el('span', 'tag', label));
-        found = true;
-      }
-    }
-    if (!found) {
-      intentsList.appendChild(el('span', 'tag', 'ไม่มี privileged intent ที่เปิดใช้งาน'));
-    }
+                if (m.role === 'owner') ownerGrid.innerHTML += cardHTML;
+                else if (m.role === 'leader') leaderGrid.innerHTML += cardHTML;
+                else memberGrid.innerHTML += cardHTML;
+            });
+        }
 
-    result.style.display = 'block';
-  } catch (err) {
-    errorBox.textContent = "เกิดข้อผิดพลาด: " + err.message;
-    errorBox.style.display = 'block';
-  } finally {
-    loading.style.display = 'none';
-    btn.disabled = false;
-  }
-}
-</script>
+        // --- 4. SEARCH & FILTER ---
+        function filterMembers() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.member-card');
+
+            cards.forEach(card => {
+                const name = card.querySelector('.member-name').innerText.toLowerCase();
+                const alias = card.querySelector('.member-alias').innerText.toLowerCase();
+                
+                if (name.includes(query) || alias.includes(query)) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+
+        // --- 5. AUTHENTICATION (LOGIN) ---
+        function openLoginModal() {
+            if (isAdminLoggedIn) {
+                openModal('adminModal');
+            } else {
+                openModal('loginModal');
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('adminPassword').value;
+            if (pass === DEFAULT_PASS) {
+                isAdminLoggedIn = true;
+                closeModal('loginModal');
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('admin-btn-text').innerText = "ADMIN PANEL";
+                alert("เข้าสู่ระบบ Admin สำเร็จ!");
+                renderMembers();
+                openModal('adminModal');
+            } else {
+                alert("รหัสผ่านไม่ถูกต้อง!");
+            }
+        }
+
+        // --- 6. MEMBER MANAGEMENT (ADD/EDIT/DELETE) ---
+        function saveMember(e) {
+            e.preventDefault();
+            const index = document.getElementById('edit-index').value;
+            const name = document.getElementById('m-name').value;
+            const alias = document.getElementById('m-alias').value;
+            const role = document.getElementById('m-role').value;
+            const img = document.getElementById('m-img').value;
+
+            const memberData = { name, alias, role, img };
+
+            if (index === "-1") {
+                members.push(memberData);
+            } else {
+                members[index] = memberData;
+                document.getElementById('edit-index').value = "-1";
+                document.getElementById('form-title').innerText = "เพิ่มรายชื่อใหม่";
+                document.getElementById('btn-save-member').innerText = "บันทึกข้อมูล";
+            }
+
+            localStorage.setItem('gangMembers', JSON.stringify(members));
+            document.getElementById('memberForm').reset();
+            renderMembers();
+            alert("บันทึกข้อมูลสมาชิกเรียบร้อย!");
+        }
+
+        function editMember(index) {
+            const m = members[index];
+            document.getElementById('edit-index').value = index;
+            document.getElementById('m-name').value = m.name;
+            document.getElementById('m-alias').value = m.alias;
+            document.getElementById('m-role').value = m.role;
+            document.getElementById('m-img').value = m.img;
+
+            document.getElementById('form-title').innerText = "แก้ไขข้อมูลสมาชิก";
+            document.getElementById('btn-save-member').innerText = "อัปเดตสมาชิก";
+            
+            switchTab('add-tab');
+        }
+
+        function deleteMember(index) {
+            if (confirm(`คุณต้องการลบ "${members[index].name}" ออกจากแก๊งหรือไม่?`)) {
+                members.splice(index, 1);
+                localStorage.setItem('gangMembers', JSON.stringify(members));
+                renderMembers();
+            }
+        }
+
+        // --- 7. SETTINGS MANAGEMENT ---
+        function saveSettings(e) {
+            e.preventDefault();
+            gangSettings.name = document.getElementById('set-gang-name').value;
+            gangSettings.logo = document.getElementById('set-gang-logo').value;
+            gangSettings.bgUrl = document.getElementById('set-bg-url').value;
+            
+            const newYtUrl = document.getElementById('set-yt-url').value;
+            const oldYtUrl = gangSettings.ytUrl;
+            gangSettings.ytUrl = newYtUrl;
+
+            localStorage.setItem('gangSettings', JSON.stringify(gangSettings));
+            applySettings();
+
+            // อัปเดตการเล่นเพลง YouTube เมื่อมีเปลี่ยน URL
+            const videoId = extractYouTubeID(newYtUrl);
+            if (ytPlayer && videoId && newYtUrl !== oldYtUrl) {
+                ytPlayer.loadVideoById(videoId);
+            }
+
+            alert("อัปเดตการตกแต่งเว็บสำเร็จ!");
+        }
+
+        // --- 8. MODALS & TABS HELPERS ---
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        function switchTab(tabId, evt) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            if (evt) {
+                evt.currentTarget.classList.add('active');
+            } else {
+                document.querySelector(`.tab-btn[onclick*="${tabId}"]`).classList.add('active');
+            }
+        }
+    </script>
 </body>
 </html>
