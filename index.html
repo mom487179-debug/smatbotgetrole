@@ -11,7 +11,6 @@
     <style>
         :root {
             --primary-gold: #dfa751;
-            --gold-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
             --gold-shine: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
             --bg-dark: #0a0a0c; 
             --card-bg: rgba(18, 18, 24, 0.75);
@@ -83,7 +82,7 @@
             gap: 10px;
         }
 
-        .btn-music-toggle {
+        .btn-music-toggle, .btn-admin, .btn-logout {
             background: rgba(223, 167, 81, 0.1);
             color: var(--primary-gold);
             border: 1px solid var(--primary-gold);
@@ -97,39 +96,45 @@
             gap: 8px;
         }
 
-        .btn-music-toggle:hover {
-            background: var(--primary-gold);
-            color: #000;
-        }
-
-        .btn-admin {
-            background: transparent;
-            color: var(--primary-gold);
-            border: 1px solid var(--primary-gold);
-            padding: 8px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-admin:hover {
+        .btn-music-toggle:hover, .btn-admin:hover {
             background: var(--primary-gold);
             color: #000;
             box-shadow: 0 0 15px rgba(223, 167, 81, 0.6);
         }
 
-        /* Main Container */
+        .btn-logout {
+            border-color: #ff4d4d;
+            color: #ff4d4d;
+            background: rgba(255, 77, 77, 0.1);
+            display: none; /* ซ่อนไว้ก่อนเข้าสู่ระบบ */
+        }
+
+        .btn-logout:hover {
+            background: #ff4d4d;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 77, 77, 0.6);
+        }
+
+        /* Update Status Bar */
+        .status-bar {
+            text-align: center;
+            margin: 15px 0 -10px;
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+
+        .status-bar i {
+            color: var(--primary-gold);
+            margin-right: 5px;
+        }
+
+        /* Container & Grids */
         .container {
             max-width: 1200px;
-            margin: 30px auto;
+            margin: 20px auto;
             padding: 0 20px;
         }
 
-        /* Search & Filter Controls */
         .controls {
             margin-bottom: 30px;
             display: flex;
@@ -168,7 +173,6 @@
             color: var(--primary-gold);
         }
 
-        /* Roster Sections */
         .section-title {
             font-size: 1.5rem;
             margin: 40px 0 20px;
@@ -187,7 +191,7 @@
             gap: 20px;
         }
 
-        /* Member Card Design */
+        /* Cards */
         .member-card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -197,7 +201,6 @@
             backdrop-filter: blur(10px);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
-            overflow: hidden;
         }
 
         .member-card:hover {
@@ -205,14 +208,9 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(223, 167, 81, 0.2);
         }
 
-        .member-card.owner { border-color: #ff3e3e; }
-        .member-card.leader { border-color: #3e8bff; }
-        .member-card.member { border-color: var(--card-border); }
-
         .role-badge {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 15px; right: 15px;
             padding: 3px 10px;
             border-radius: 12px;
             font-size: 0.75rem;
@@ -225,25 +223,15 @@
         .badge-member { background: rgba(223, 167, 81, 0.2); color: var(--primary-gold); border: 1px solid var(--primary-gold); }
 
         .avatar {
-            width: 100px;
-            height: 100px;
+            width: 100px; height: 100px;
             border-radius: 50%;
             object-fit: cover;
             margin: 10px auto 15px;
             border: 3px solid rgba(255, 255, 255, 0.1);
         }
 
-        .member-name {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .member-alias {
-            font-size: 0.85rem;
-            color: #aaa;
-            margin-bottom: 15px;
-        }
+        .member-name { font-size: 1.2rem; font-weight: 600; margin-bottom: 5px; }
+        .member-alias { font-size: 0.85rem; color: #aaa; margin-bottom: 15px; }
 
         .member-actions {
             display: flex;
@@ -262,7 +250,7 @@
         .btn-edit { background: #ffb703; color: #000; }
         .btn-delete { background: #e63946; color: #fff; }
 
-        /* Modal Popup System */
+        /* Modals */
         .modal {
             display: none;
             position: fixed;
@@ -296,58 +284,32 @@
             cursor: pointer;
         }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: var(--primary-gold);
-            font-size: 0.9rem;
-        }
-
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: var(--primary-gold); font-size: 0.9rem; }
         .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            background: #0a0a0c;
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: #fff;
-            outline: none;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            border-color: var(--primary-gold);
+            width: 100%; padding: 10px;
+            background: #0a0a0c; border: 1px solid #333;
+            border-radius: 8px; color: #fff; outline: none;
         }
 
         .btn-submit {
-            width: 100%;
-            padding: 12px;
+            width: 100%; padding: 12px;
             background: var(--gold-shine);
-            border: none;
-            color: #000;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 10px;
+            border: none; color: #000;
+            font-weight: bold; border-radius: 8px;
+            cursor: pointer; margin-top: 10px;
         }
 
         .admin-panel-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #333;
+            display: flex; gap: 10px;
+            margin-bottom: 20px; border-bottom: 1px solid #333;
             padding-bottom: 10px;
         }
 
         .tab-btn {
-            background: none;
-            border: none;
-            color: #aaa;
-            padding: 8px 15px;
-            cursor: pointer;
-            font-weight: 600;
+            background: none; border: none;
+            color: #aaa; padding: 8px 15px;
+            cursor: pointer; font-weight: 600;
         }
 
         .tab-btn.active {
@@ -358,13 +320,9 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* ซ่อนเครื่องเล่นเพลง YouTube ไว้เบื้องหลัง */
         #music-player-container {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-            left: -9999px;
+            position: absolute; width: 1px; height: 1px;
+            overflow: hidden; left: -9999px;
         }
     </style>
 </head>
@@ -377,19 +335,26 @@
             <h1 id="display-name" class="gang-title">THE ROYAL GANG</h1>
         </div>
         <div class="header-controls">
-            <!-- ปุ่มควบคุมการเปิด/ปิดเพลง -->
             <button class="btn-music-toggle" id="music-toggle-btn" onclick="toggleMusic()">
                 <i class="fa-solid fa-music"></i> <span id="music-btn-text">เล่นเพลง</span>
             </button>
             <button class="btn-admin" id="admin-main-btn" onclick="openLoginModal()">
                 <i class="fa-solid fa-lock"></i> <span id="admin-btn-text">ADMIN MENU</span>
             </button>
+            <!-- ปุ่มออกจากระบบ -->
+            <button class="btn-logout" id="admin-logout-btn" onclick="handleLogout()">
+                <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ
+            </button>
         </div>
     </header>
 
-    <!-- Main Content Container -->
+    <!-- Status Bar บันทึกเวลาอัปเดตล่าสุด -->
+    <div class="status-bar">
+        <i class="fa-solid fa-clock-rotate-left"></i> อัปเดตล่าสุดเมื่อ: <span id="last-updated-time">กำลังโหลด...</span>
+    </div>
+
+    <!-- Main Content -->
     <div class="container">
-        <!-- Search Bar -->
         <div class="controls">
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -397,20 +362,17 @@
             </div>
         </div>
 
-        <!-- OWNER SECTION -->
         <div class="section-title"><i class="fa-solid fa-crown"></i> GANG OWNER</div>
         <div class="grid-container" id="owner-grid"></div>
 
-        <!-- LEADER SECTION -->
         <div class="section-title"><i class="fa-solid fa-shield-halved"></i> GANG LEADER</div>
         <div class="grid-container" id="leader-grid"></div>
 
-        <!-- MEMBER SECTION -->
         <div class="section-title"><i class="fa-solid fa-users"></i> GANG MEMBER</div>
         <div class="grid-container" id="member-grid"></div>
     </div>
 
-    <!-- 1. LOGIN MODAL -->
+    <!-- LOGIN MODAL -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('loginModal')">&times;</span>
@@ -427,7 +389,7 @@
         </div>
     </div>
 
-    <!-- 2. ADMIN CONTROL PANEL MODAL -->
+    <!-- ADMIN PANEL MODAL -->
     <div class="modal" id="adminModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('adminModal')">&times;</span>
@@ -479,37 +441,31 @@
                         <input type="url" id="set-gang-logo">
                     </div>
                     <div class="form-group">
-                        <label>URL ภาพพื้นหลังเว็บไซต์ (Background Image)</label>
-                        <input type="url" id="set-bg-url" placeholder="ใส่ ลิงก์รูปภาพ เช่น https://site.com/bg.jpg">
+                        <label>URL ภาพพื้นหลังเว็บไซต์</label>
+                        <input type="url" id="set-bg-url" placeholder="https://site.com/bg.jpg">
                     </div>
-                    <!-- ช่องใส่ลิงก์ YouTube -->
                     <div class="form-group">
-                        <label><i class="fa-brands fa-youtube" style="color: #ff0000;"></i> ลิงก์เพลง YouTube (YouTube Video URL)</label>
-                        <input type="url" id="set-yt-url" placeholder="เช่น https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+                        <label><i class="fa-brands fa-youtube" style="color: #ff0000;"></i> ลิงก์เพลง YouTube</label>
+                        <input type="url" id="set-yt-url" placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
                     </div>
                     <button type="submit" class="btn-submit">อัปเดตการตกแต่ง</button>
                 </form>
             </div>
-
         </div>
     </div>
 
-    <!-- Container สำหรับซ่อนเครื่องเล่น YouTube -->
+    <!-- Hidden Player -->
     <div id="music-player-container">
         <div id="youtube-player"></div>
     </div>
 
-    <!-- โหลด YouTube Iframe Player API -->
+    <!-- Scripts -->
     <script src="https://www.youtube.com/iframe_api"></script>
-
-    <!-- โหลด Firebase SDK (Compat Version) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
-    <!-- JavaScript Logic (Realtime) -->
     <script>
         // --- FIREBASE CONFIGURATION ---
-        // ⚠️ นำค่า Config จากคอนโซล Firebase ของคุณมาวางแทนที่ด้านล่างนี้ ⚠️
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -520,7 +476,6 @@
             appId: "YOUR_APP_ID"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
@@ -534,13 +489,14 @@
             name: "THE ROYAL GANG",
             logo: "https://via.placeholder.com/150/000000/dfa751?text=GANG",
             bgUrl: "",
-            ytUrl: ""
+            ytUrl: "",
+            lastUpdated: "-"
         };
 
         let members = [];
 
         // --- REALTIME LISTENERS ---
-        // 1. ดึงและฟังค่าการเปลี่ยนตั้งค่าเว็บแบบ Realtime
+        // 1. ดึงข้อมูลการตกแต่ง + เวลาอัปเดต
         db.ref('gangSettings').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
@@ -548,46 +504,44 @@
                 gangSettings = data;
                 applySettings();
 
-                // ถ้ารหัสวิดีโอเปลี่ยน ให้โหลดวิดีโอใหม่ทันที
                 const videoId = extractYouTubeID(gangSettings.ytUrl);
                 if (ytPlayer && videoId && gangSettings.ytUrl !== oldYtUrl) {
                     ytPlayer.loadVideoById(videoId);
                 }
             } else {
-                // ถ้ายังไม่มีข้อมูลในระบบ ให้สร้างค่าเริ่มต้นขึ้นไป
+                gangSettings.lastUpdated = new Date().toLocaleString('th-TH');
                 db.ref('gangSettings').set(gangSettings);
             }
         });
 
-        // 2. ดึงและฟังค่ารายชื่อสมาชิกแบบ Realtime
+        // 2. ดึงข้อมูลรายชื่อสมาชิก
         db.ref('gangMembers').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
                 members = Array.isArray(data) ? data : Object.values(data);
             } else {
-                // ค่าเริ่มต้นกรณีฐานข้อมูลยังว่างเปล่า
                 members = [
                     { name: "Vito Corleone", alias: "Godfather", role: "owner", img: "https://i.pravatar.cc/150?img=11" },
-                    { name: "Sonny Corleone", alias: "Underboss", role: "leader", img: "https://i.pravatar.cc/150?img=12" },
-                    { name: "Tom Hagen", alias: "Consigliere", role: "leader", img: "https://i.pravatar.cc/150?img=13" },
-                    { name: "Paulie Gatto", alias: "Soldier", role: "member", img: "https://i.pravatar.cc/150?img=14" }
+                    { name: "Sonny Corleone", alias: "Underboss", role: "leader", img: "https://i.pravatar.cc/150?img=12" }
                 ];
                 db.ref('gangMembers').set(members);
             }
             renderMembers();
         });
 
-        // Unlocking Autoplay
-        window.onload = function() {
-            document.body.addEventListener('click', function unlockAutoplay() {
-                if (ytPlayer && typeof ytPlayer.playVideo === 'function' && !isMusicPlaying) {
-                    ytPlayer.playVideo();
-                }
-                document.body.removeEventListener('click', unlockAutoplay);
-            }, { once: true });
-        };
+        // --- HELPER: UPDATE TIMESTAMP ---
+        function updateTimestamp() {
+            const now = new Date();
+            const formattedTime = now.toLocaleString('th-TH', { 
+                year: 'numeric', month: 'short', day: 'numeric', 
+                hour: '2-digit', minute: '2-digit', second: '2-digit' 
+            });
+            
+            gangSettings.lastUpdated = formattedTime;
+            db.ref('gangSettings/lastUpdated').set(formattedTime);
+        }
 
-        // --- YOUTUBE API LOGIC ---
+        // --- YOUTUBE LOGIC ---
         function extractYouTubeID(url) {
             if (!url) return null;
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -598,26 +552,15 @@
         function onYouTubeIframeAPIReady() {
             const videoId = extractYouTubeID(gangSettings.ytUrl);
             ytPlayer = new YT.Player('youtube-player', {
-                height: '0',
-                width: '0',
+                height: '0', width: '0',
                 videoId: videoId || '',
-                playerVars: {
-                    'autoplay': 1,
-                    'controls': 0,
-                    'loop': 1,
-                    'playlist': videoId || ''
-                },
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
+                playerVars: { 'autoplay': 1, 'controls': 0, 'loop': 1, 'playlist': videoId || '' },
+                events: { 'onReady': onPlayerReady, 'onStateChange': onPlayerStateChange }
             });
         }
 
         function onPlayerReady(event) {
-            if (gangSettings.ytUrl) {
-                event.target.playVideo();
-            }
+            if (gangSettings.ytUrl) event.target.playVideo();
         }
 
         function onPlayerStateChange(event) {
@@ -636,18 +579,16 @@
 
         function toggleMusic() {
             if (!ytPlayer || typeof ytPlayer.playVideo !== 'function') return;
-            if (isMusicPlaying) {
-                ytPlayer.pauseVideo();
-            } else {
-                ytPlayer.playVideo();
-            }
+            if (isMusicPlaying) ytPlayer.pauseVideo();
+            else ytPlayer.playVideo();
         }
 
-        // --- DISPLAY & RENDER FUNCTIONS ---
+        // --- APPLY & RENDER ---
         function applySettings() {
             document.getElementById('display-name').innerText = gangSettings.name || "THE ROYAL GANG";
             document.getElementById('display-logo').src = gangSettings.logo || "https://via.placeholder.com/150/000000/dfa751?text=GANG";
-            
+            document.getElementById('last-updated-time').innerText = gangSettings.lastUpdated || "ไม่มีข้อมูล";
+
             if (gangSettings.bgUrl) {
                 document.body.style.backgroundImage = `linear-gradient(rgba(10, 10, 12, 0.75), rgba(10, 10, 12, 0.85)), url('${gangSettings.bgUrl}')`;
             } else {
@@ -694,30 +635,19 @@
             });
         }
 
-        // --- SEARCH & FILTER ---
         function filterMembers() {
             const query = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.member-card');
-
-            cards.forEach(card => {
+            document.querySelectorAll('.member-card').forEach(card => {
                 const name = card.querySelector('.member-name').innerText.toLowerCase();
                 const alias = card.querySelector('.member-alias').innerText.toLowerCase();
-                
-                if (name.includes(query) || alias.includes(query)) {
-                    card.style.display = "block";
-                } else {
-                    card.style.display = "none";
-                }
+                card.style.display = (name.includes(query) || alias.includes(query)) ? "block" : "none";
             });
         }
 
-        // --- AUTHENTICATION ---
+        // --- AUTHENTICATION & LOGOUT ---
         function openLoginModal() {
-            if (isAdminLoggedIn) {
-                openModal('adminModal');
-            } else {
-                openModal('loginModal');
-            }
+            if (isAdminLoggedIn) openModal('adminModal');
+            else openModal('loginModal');
         }
 
         function handleLogin(e) {
@@ -727,8 +657,11 @@
                 isAdminLoggedIn = true;
                 closeModal('loginModal');
                 document.getElementById('adminPassword').value = '';
+                
+                // ปรับ UI สถานะ แอดมิน
                 document.getElementById('admin-btn-text').innerText = "ADMIN PANEL";
-                alert("เข้าสู่ระบบ Admin สำเร็จ!");
+                document.getElementById('admin-logout-btn').style.display = "flex";
+                
                 renderMembers();
                 openModal('adminModal');
             } else {
@@ -736,7 +669,18 @@
             }
         }
 
-        // --- DATA UPDATE TO FIREBASE REALTIME DATABASE ---
+        function handleLogout() {
+            if (confirm("คุณต้องการออกจากระบบ Admin หรือไม่?")) {
+                isAdminLoggedIn = false;
+                document.getElementById('admin-btn-text').innerText = "ADMIN MENU";
+                document.getElementById('admin-logout-btn').style.display = "none";
+                closeModal('adminModal');
+                renderMembers(); // ซ่อนปุ่ม แก้ไข/ลบ
+                alert("ออกจากระบบเรียบร้อยแล้ว");
+            }
+        }
+
+        // --- SAVE DATA TO FIREBASE ---
         function saveMember(e) {
             e.preventDefault();
             const index = document.getElementById('edit-index').value;
@@ -756,11 +700,11 @@
                 document.getElementById('btn-save-member').innerText = "บันทึกข้อมูล";
             }
 
-            // บันทึกลง Firebase (ส่งอัปเดตไปหาเครื่องอื่นทันที)
             db.ref('gangMembers').set(members).then(() => {
+                updateTimestamp(); // บันทึกเวลาอัปเดต
                 document.getElementById('memberForm').reset();
-                alert("บันทึกข้อมูลสมาชิกเรียบร้อย!");
-            }).catch(err => alert("เกิดข้อผิดพลาดในการบันทึก: " + err.message));
+                alert("บันทึกข้อมูลสำเร็จ!");
+            });
         }
 
         function editMember(index) {
@@ -773,15 +717,15 @@
 
             document.getElementById('form-title').innerText = "แก้ไขข้อมูลสมาชิก";
             document.getElementById('btn-save-member').innerText = "อัปเดตสมาชิก";
-            
             switchTab('add-tab');
         }
 
         function deleteMember(index) {
             if (confirm(`คุณต้องการลบ "${members[index].name}" ออกจากแก๊งหรือไม่?`)) {
                 members.splice(index, 1);
-                // บันทึกที่เหลือลง Firebase
-                db.ref('gangMembers').set(members);
+                db.ref('gangMembers').set(members).then(() => {
+                    updateTimestamp(); // บันทึกเวลาอัปเดต
+                });
             }
         }
 
@@ -792,13 +736,13 @@
             gangSettings.bgUrl = document.getElementById('set-bg-url').value;
             gangSettings.ytUrl = document.getElementById('set-yt-url').value;
 
-            // บันทึกตั้งค่าลง Firebase (ส่งอัปเดตไปหาเครื่องอื่นทันที)
             db.ref('gangSettings').set(gangSettings).then(() => {
+                updateTimestamp(); // บันทึกเวลาอัปเดต
                 alert("อัปเดตการตกแต่งเว็บสำเร็จ!");
-            }).catch(err => alert("เกิดข้อผิดพลาดในการตั้งค่า: " + err.message));
+            });
         }
 
-        // --- MODALS & TABS HELPERS ---
+        // --- MODAL & TAB HELPERS ---
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
