@@ -17,7 +17,6 @@
             --card-bg: rgba(18, 18, 24, 0.75);
             --card-border: rgba(223, 167, 81, 0.3);
             --text-light: #f1f1f1;
-            --danger-color: #e63946;
         }
 
         * {
@@ -295,11 +294,6 @@
             font-size: 1.5rem;
             color: #aaa;
             cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .close-btn:hover {
-            color: #fff;
         }
 
         .form-group {
@@ -337,29 +331,6 @@
             border-radius: 8px;
             cursor: pointer;
             margin-top: 10px;
-        }
-
-        .btn-logout {
-            width: 100%;
-            padding: 10px;
-            background: rgba(230, 57, 70, 0.15);
-            border: 1px solid var(--danger-color);
-            color: var(--danger-color);
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-logout:hover {
-            background: var(--danger-color);
-            color: #fff;
-            box-shadow: 0 0 10px rgba(230, 57, 70, 0.5);
         }
 
         .admin-panel-tabs {
@@ -520,11 +491,6 @@
                 </form>
             </div>
 
-            <!-- ปุ่มออกจากระบบ Admin (ชัดเจน) -->
-            <button class="btn-logout" onclick="handleLogout()">
-                <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบแอดมิน (LOGOUT)
-            </button>
-
         </div>
     </div>
 
@@ -533,82 +499,38 @@
         <div id="youtube-player"></div>
     </div>
 
-    <!-- โหลด Firebase SDK v9+ (Compat Version เพื่อให้ใช้ง่าย) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-
     <!-- โหลด YouTube Iframe Player API -->
     <script src="https://www.youtube.com/iframe_api"></script>
 
     <!-- JavaScript Logic -->
     <script>
-        // --- 1. FIREBASE CONFIGURATION & INITIALIZATION ---
-        // ** นำค่าคอนฟิกจาก Firebase Console มาวางตรงนี้ **
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
-        // เริ่มต้นใช้งาน Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        // --- GLOBAL VARIABLES ---
+        // --- 1. DEFAULT DATA & INITIALIZATION ---
         const DEFAULT_PASS = "5720";
         let isAdminLoggedIn = false;
         let ytPlayer = null;
         let isMusicPlaying = false;
 
-        let gangSettings = {
+        // โหลดข้อมูลจาก LocalStorage หรือใช้ค่าเริ่มต้น
+        let gangSettings = JSON.parse(localStorage.getItem('gangSettings')) || {
             name: "THE ROYAL GANG",
             logo: "https://via.placeholder.com/150/000000/dfa751?text=GANG",
             bgUrl: "",
             ytUrl: ""
         };
 
-        let members = [
+        let members = JSON.parse(localStorage.getItem('gangMembers')) || [
             { name: "Vito Corleone", alias: "Godfather", role: "owner", img: "https://i.pravatar.cc/150?img=11" },
             { name: "Sonny Corleone", alias: "Underboss", role: "leader", img: "https://i.pravatar.cc/150?img=12" },
             { name: "Tom Hagen", alias: "Consigliere", role: "leader", img: "https://i.pravatar.cc/150?img=13" },
             { name: "Paulie Gatto", alias: "Soldier", role: "member", img: "https://i.pravatar.cc/150?img=14" }
         ];
 
-        // --- 2. FIREBASE REALTIME LISTENERS (ดึงข้อมูลล่าสุดอัตโนมัติ) ---
+        // เรียกใช้งานฟังก์ชันเมื่อเปิดหน้าเว็บ
         window.onload = function() {
-            // ฟังการเปลี่ยนแปลงของตั้งค่าหน้าเว็บ
-            db.ref('gangSettings').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    gangSettings = data;
-                    applySettings();
-                    
-                    // อัปเดตเพลง YouTube เมื่อมีการเปลี่ยนลิงก์จากเซิร์ฟเวอร์
-                    if (ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
-                        const videoId = extractYouTubeID(gangSettings.ytUrl);
-                        if (videoId) {
-                            ytPlayer.loadVideoById(videoId);
-                        }
-                    }
-                }
-            });
+            applySettings();
+            renderMembers();
 
-            // ฟังการเปลี่ยนแปลงของสมาชิก
-            db.ref('gangMembers').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    members = data;
-                } else {
-                    members = [];
-                }
-                renderMembers();
-            });
-
-            // ปลดล็อค Autoplay Audio เมื่อผู้ใช้คลิกแรก
+            // ปลดล็อค Autoplay เมื่อผู้ใช้นับการกดคลิกแรกในหน้าเว็บ (เบราว์เซอร์ส่วนใหญ่บล็อก Autoplay Audio ไว้)
             document.body.addEventListener('click', function unlockAutoplay() {
                 if (ytPlayer && typeof ytPlayer.playVideo === 'function' && !isMusicPlaying) {
                     ytPlayer.playVideo();
@@ -617,7 +539,8 @@
             }, { once: true });
         };
 
-        // --- 3. YOUTUBE API & MUSIC LOGIC ---
+        // --- 2. YOUTUBE API & MUSIC LOGIC ---
+        // สกัด Video ID ออกจาก URL ของ YouTube
         function extractYouTubeID(url) {
             if (!url) return null;
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -625,6 +548,7 @@
             return (match && match[2].length === 11) ? match[2] : null;
         }
 
+        // ฟังก์ชันตามมาตรฐาน YouTube API จะถูกเรียกใช้อัตโนมัติเมื่อ API พร้อม
         function onYouTubeIframeAPIReady() {
             const videoId = extractYouTubeID(gangSettings.ytUrl);
             ytPlayer = new YT.Player('youtube-player', {
@@ -673,22 +597,20 @@
             }
         }
 
-        // --- 4. RENDER & DISPLAY FUNCTIONS ---
+        // --- 3. RENDER & DISPLAY FUNCTIONS ---
         function applySettings() {
-            document.getElementById('display-name').innerText = gangSettings.name || 'GANG ROSTER';
-            document.getElementById('display-logo').src = gangSettings.logo || 'https://via.placeholder.com/150';
+            document.getElementById('display-name').innerText = gangSettings.name;
+            document.getElementById('display-logo').src = gangSettings.logo;
             
             if(gangSettings.bgUrl) {
                 document.body.style.backgroundImage = `linear-gradient(rgba(10, 10, 12, 0.75), rgba(10, 10, 12, 0.85)), url('${gangSettings.bgUrl}')`;
-            } else {
-                document.body.style.backgroundImage = 'radial-gradient(circle at center, rgba(223, 167, 81, 0.1) 0%, transparent 70%)';
             }
 
             // เติมค่าใส่ฟอร์มตั้งค่า
-            document.getElementById('set-gang-name').value = gangSettings.name || '';
-            document.getElementById('set-gang-logo').value = gangSettings.logo || '';
-            document.getElementById('set-bg-url').value = gangSettings.bgUrl || '';
-            document.getElementById('set-yt-url').value = gangSettings.ytUrl || '';
+            document.getElementById('set-gang-name').value = gangSettings.name;
+            document.getElementById('set-gang-logo').value = gangSettings.logo;
+            document.getElementById('set-bg-url').value = gangSettings.bgUrl || "";
+            document.getElementById('set-yt-url').value = gangSettings.ytUrl || "";
         }
 
         function renderMembers() {
@@ -701,7 +623,7 @@
             memberGrid.innerHTML = '';
 
             members.forEach((m, index) => {
-                const defaultImg = `https://via.placeholder.com/150/111/fff?text=${m.name ? m.name.charAt(0) : 'M'}`;
+                const defaultImg = `https://via.placeholder.com/150/111/fff?text=${m.name.charAt(0)}`;
                 const imgSrc = m.img ? m.img : defaultImg;
                 
                 const cardHTML = `
@@ -725,7 +647,7 @@
             });
         }
 
-        // --- 5. SEARCH & FILTER ---
+        // --- 4. SEARCH & FILTER ---
         function filterMembers() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const cards = document.querySelectorAll('.member-card');
@@ -742,7 +664,7 @@
             });
         }
 
-        // --- 6. AUTHENTICATION (LOGIN & LOGOUT) ---
+        // --- 5. AUTHENTICATION (LOGIN) ---
         function openLoginModal() {
             if (isAdminLoggedIn) {
                 openModal('adminModal');
@@ -759,6 +681,7 @@
                 closeModal('loginModal');
                 document.getElementById('adminPassword').value = '';
                 document.getElementById('admin-btn-text').innerText = "ADMIN PANEL";
+                alert("เข้าสู่ระบบ Admin สำเร็จ!");
                 renderMembers();
                 openModal('adminModal');
             } else {
@@ -766,20 +689,10 @@
             }
         }
 
-        function handleLogout() {
-            if (confirm("คุณต้องการออกจากระบบแอดมินใช่หรือไม่?")) {
-                isAdminLoggedIn = false;
-                document.getElementById('admin-btn-text').innerText = "ADMIN MENU";
-                closeModal('adminModal');
-                renderMembers();
-                alert("ออกจากระบบเรียบร้อยแล้ว!");
-            }
-        }
-
-        // --- 7. MEMBER MANAGEMENT (SAVE TO FIREBASE) ---
+        // --- 6. MEMBER MANAGEMENT (ADD/EDIT/DELETE) ---
         function saveMember(e) {
             e.preventDefault();
-            const index = parseInt(document.getElementById('edit-index').value);
+            const index = document.getElementById('edit-index').value;
             const name = document.getElementById('m-name').value;
             const alias = document.getElementById('m-alias').value;
             const role = document.getElementById('m-role').value;
@@ -787,7 +700,7 @@
 
             const memberData = { name, alias, role, img };
 
-            if (index === -1) {
+            if (index === "-1") {
                 members.push(memberData);
             } else {
                 members[index] = memberData;
@@ -796,13 +709,10 @@
                 document.getElementById('btn-save-member').innerText = "บันทึกข้อมูล";
             }
 
-            // บันทึกลง Firebase Realtime Database
-            db.ref('gangMembers').set(members).then(() => {
-                document.getElementById('memberForm').reset();
-                alert("บันทึกข้อมูลสมาชิกลง Cloud เรียบร้อย!");
-            }).catch(error => {
-                alert("เกิดข้อผิดพลาดในการบันทึก: " + error.message);
-            });
+            localStorage.setItem('gangMembers', JSON.stringify(members));
+            document.getElementById('memberForm').reset();
+            renderMembers();
+            alert("บันทึกข้อมูลสมาชิกเรียบร้อย!");
         }
 
         function editMember(index) {
@@ -822,31 +732,35 @@
         function deleteMember(index) {
             if (confirm(`คุณต้องการลบ "${members[index].name}" ออกจากแก๊งหรือไม่?`)) {
                 members.splice(index, 1);
-                
-                // อัปเดตข้อมูลที่ลบไป Firebase Realtime Database
-                db.ref('gangMembers').set(members).then(() => {
-                    alert("ลบข้อมูลสำเร็จ!");
-                });
+                localStorage.setItem('gangMembers', JSON.stringify(members));
+                renderMembers();
             }
         }
 
-        // --- 8. SETTINGS MANAGEMENT (SAVE TO FIREBASE) ---
+        // --- 7. SETTINGS MANAGEMENT ---
         function saveSettings(e) {
             e.preventDefault();
             gangSettings.name = document.getElementById('set-gang-name').value;
             gangSettings.logo = document.getElementById('set-gang-logo').value;
             gangSettings.bgUrl = document.getElementById('set-bg-url').value;
-            gangSettings.ytUrl = document.getElementById('set-yt-url').value;
+            
+            const newYtUrl = document.getElementById('set-yt-url').value;
+            const oldYtUrl = gangSettings.ytUrl;
+            gangSettings.ytUrl = newYtUrl;
 
-            // บันทึกตั้งค่าลง Firebase Realtime Database
-            db.ref('gangSettings').set(gangSettings).then(() => {
-                alert("อัปเดตการตกแต่งเว็บลง Cloud เรียบร้อย!");
-            }).catch(error => {
-                alert("เกิดข้อผิดพลาดในการบันทึก: " + error.message);
-            });
+            localStorage.setItem('gangSettings', JSON.stringify(gangSettings));
+            applySettings();
+
+            // อัปเดตการเล่นเพลง YouTube เมื่อมีเปลี่ยน URL
+            const videoId = extractYouTubeID(newYtUrl);
+            if (ytPlayer && videoId && newYtUrl !== oldYtUrl) {
+                ytPlayer.loadVideoById(videoId);
+            }
+
+            alert("อัปเดตการตกแต่งเว็บสำเร็จ!");
         }
 
-        // --- 9. MODALS & TABS HELPERS ---
+        // --- 8. MODALS & TABS HELPERS ---
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
