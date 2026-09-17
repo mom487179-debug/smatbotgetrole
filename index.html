@@ -575,5 +575,18 @@ async function connectFirebase(){
   }, () => setSync("local", "การเชื่อมต่อขัดข้อง"));
 }
 </script>
+<script>
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', function(e) {
+  if (
+    e.key === 'F12' ||
+    (e.ctrlKey && e.key.toLowerCase() === 'u') ||
+    (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(e.key.toLowerCase()))
+  ) {
+    e.preventDefault();
+  }
+});
+</script>
+</body>
 </body>
 </html>
