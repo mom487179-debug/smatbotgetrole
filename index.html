@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -510,7 +511,7 @@ $("loginForm").addEventListener("submit", async e => {
   const inputPass = $("adminPassword").value;
   const inputHash = await hashSHA256(inputPass);
   
-  if (inputHash === ADMIN_PASS_HASH){
+ if (inputHash === "2b5efb7bd6799426c1c442ed980251b9b75a106eaed2f3249a8b05d2eb193435"){
     isAdmin = true;
     $("adminPassword").value = "";
     closeModal("loginModal");
