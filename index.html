@@ -586,6 +586,20 @@ document.addEventListener('keydown', function(e) {
     e.preventDefault();
   }
 });
+<script>
+// ปิดคลิกขวา
+document.addEventListener('contextmenu', e => e.preventDefault());
+
+// ปิดปุ่มลัดยอดฮิต: Ctrl+U, F12, Ctrl+Shift+I/J/C
+document.addEventListener('keydown', function(e) {
+  if (
+    e.key === 'F12' ||
+    (e.ctrlKey && e.key.toLowerCase() === 'u') ||
+    (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(e.key.toLowerCase()))
+  ) {
+    e.preventDefault();
+  }
+});
 </script>
 </body>
 </body>
