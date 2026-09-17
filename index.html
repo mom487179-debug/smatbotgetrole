@@ -307,7 +307,7 @@
             font-size: 0.9rem;
         }
 
-        .form-group input, .form-group select {
+        .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 10px;
             background: #0a0a0c;
@@ -317,7 +317,7 @@
             outline: none;
         }
 
-        .form-group input:focus, .form-group select:focus {
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             border-color: var(--primary-gold);
         }
 
@@ -358,7 +358,6 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* ซ่อนเครื่องเล่นเพลง YouTube ไว้เบื้องหลัง */
         #music-player-container {
             position: absolute;
             width: 1px;
@@ -370,14 +369,12 @@
 </head>
 <body>
 
-    <!-- Header Navbar -->
     <header>
         <div class="gang-brand">
             <img id="display-logo" class="gang-logo" src="https://via.placeholder.com/150/000000/dfa751?text=GANG" alt="Gang Logo">
             <h1 id="display-name" class="gang-title">THE ROYAL GANG</h1>
         </div>
         <div class="header-controls">
-            <!-- ปุ่มควบคุมการเปิด/ปิดเพลง -->
             <button class="btn-music-toggle" id="music-toggle-btn" onclick="toggleMusic()">
                 <i class="fa-solid fa-music"></i> <span id="music-btn-text">เล่นเพลง</span>
             </button>
@@ -387,9 +384,7 @@
         </div>
     </header>
 
-    <!-- Main Content Container -->
     <div class="container">
-        <!-- Search Bar -->
         <div class="controls">
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -397,20 +392,16 @@
             </div>
         </div>
 
-        <!-- OWNER SECTION -->
         <div class="section-title"><i class="fa-solid fa-crown"></i> GANG OWNER</div>
         <div class="grid-container" id="owner-grid"></div>
 
-        <!-- LEADER SECTION -->
         <div class="section-title"><i class="fa-solid fa-shield-halved"></i> GANG LEADER</div>
         <div class="grid-container" id="leader-grid"></div>
 
-        <!-- MEMBER SECTION -->
         <div class="section-title"><i class="fa-solid fa-users"></i> GANG MEMBER</div>
         <div class="grid-container" id="member-grid"></div>
     </div>
 
-    <!-- 1. LOGIN MODAL -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('loginModal')">&times;</span>
@@ -427,7 +418,6 @@
         </div>
     </div>
 
-    <!-- 2. ADMIN CONTROL PANEL MODAL -->
     <div class="modal" id="adminModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('adminModal')">&times;</span>
@@ -435,9 +425,9 @@
             <div class="admin-panel-tabs">
                 <button class="tab-btn active" onclick="switchTab('add-tab', event)">เพิ่มสมาชิก</button>
                 <button class="tab-btn" onclick="switchTab('style-tab', event)">ตกแต่งเว็บไซต์</button>
+                <button class="tab-btn" onclick="switchTab('sync-tab', event)">ซิงค์ข้อมูล (ย้ายเครื่อง)</button>
             </div>
 
-            <!-- Tab 1: เพิ่ม/แก้ไขสมาชิก -->
             <div id="add-tab" class="tab-content active">
                 <h3 id="form-title" style="color: #fff; margin-bottom: 15px;">เพิ่มรายชื่อใหม่</h3>
                 <form id="memberForm" onsubmit="saveMember(event)">
@@ -466,7 +456,6 @@
                 </form>
             </div>
 
-            <!-- Tab 2: ตกแต่งเว็บไซต์ -->
             <div id="style-tab" class="tab-content">
                 <h3 style="color: #fff; margin-bottom: 15px;">ตั้งค่ารูปร่างหน้าตาเว็บ</h3>
                 <form onsubmit="saveSettings(event)">
@@ -480,37 +469,49 @@
                     </div>
                     <div class="form-group">
                         <label>URL ภาพพื้นหลังเว็บไซต์ (Background Image)</label>
-                        <input type="url" id="set-bg-url" placeholder="ใส่ ลิงก์รูปภาพ เช่น https://site.com/bg.jpg">
+                        <input type="url" id="set-bg-url" placeholder="เช่น https://site.com/bg.jpg">
                     </div>
-                    <!-- ช่องใส่ลิงก์ YouTube -->
                     <div class="form-group">
-                        <label><i class="fa-brands fa-youtube" style="color: #ff0000;"></i> ลิงก์เพลง YouTube (YouTube Video URL)</label>
+                        <label><i class="fa-brands fa-youtube" style="color: #ff0000;"></i> ลิงก์เพลง YouTube</label>
                         <input type="url" id="set-yt-url" placeholder="เช่น https://www.youtube.com/watch?v=dQw4w9WgXcQ">
                     </div>
                     <button type="submit" class="btn-submit">อัปเดตการตกแต่ง</button>
                 </form>
             </div>
 
+            <!-- Tab 3: สำหรับย้ายข้อมูลไปเครื่องอื่น -->
+            <div id="sync-tab" class="tab-content">
+                <h3 style="color: #fff; margin-bottom: 10px;">คัดลอก/ส่งออก ข้อมูลแก๊ง</h3>
+                <p style="font-size: 0.8rem; color: #aaa; margin-bottom: 15px;">
+                    คัดลอกข้อความในช่องนี้จากคอมพิวเตอร์ แล้วนำไปวางในมือถือเพื่ออัปเดตข้อมูลให้ตรงกัน
+                </p>
+                <div class="form-group">
+                    <label>รหัสข้อมูลสำรอง (JSON Data)</label>
+                    <textarea id="sync-json-data" rows="5" placeholder="วางรหัสข้อมูลที่คัดลอกจากเครื่องอื่นที่นี่..."></textarea>
+                </div>
+                <button type="button" class="btn-submit" onclick="exportData()" style="background: #3e8bff; color: #fff; margin-bottom: 8px;">
+                    <i class="fa-solid fa-copy"></i> คัดลอกรหัสข้อมูลจากเครื่องนี้
+                </button>
+                <button type="button" class="btn-submit" onclick="importData()">
+                    <i class="fa-solid fa-file-import"></i> นำเข้ารหัสข้อมูลสู่เครื่องนี้
+                </button>
+            </div>
+
         </div>
     </div>
 
-    <!-- Container สำหรับซ่อนเครื่องเล่น YouTube -->
     <div id="music-player-container">
         <div id="youtube-player"></div>
     </div>
 
-    <!-- โหลด YouTube Iframe Player API -->
     <script src="https://www.youtube.com/iframe_api"></script>
 
-    <!-- JavaScript Logic -->
     <script>
-        // --- 1. DEFAULT DATA & INITIALIZATION ---
         const DEFAULT_PASS = "5720";
         let isAdminLoggedIn = false;
         let ytPlayer = null;
         let isMusicPlaying = false;
 
-        // โหลดข้อมูลจาก LocalStorage หรือใช้ค่าเริ่มต้น
         let gangSettings = JSON.parse(localStorage.getItem('gangSettings')) || {
             name: "THE ROYAL GANG",
             logo: "https://via.placeholder.com/150/000000/dfa751?text=GANG",
@@ -525,12 +526,10 @@
             { name: "Paulie Gatto", alias: "Soldier", role: "member", img: "https://i.pravatar.cc/150?img=14" }
         ];
 
-        // เรียกใช้งานฟังก์ชันเมื่อเปิดหน้าเว็บ
         window.onload = function() {
             applySettings();
             renderMembers();
 
-            // ปลดล็อค Autoplay เมื่อผู้ใช้นับการกดคลิกแรกในหน้าเว็บ (เบราว์เซอร์ส่วนใหญ่บล็อก Autoplay Audio ไว้)
             document.body.addEventListener('click', function unlockAutoplay() {
                 if (ytPlayer && typeof ytPlayer.playVideo === 'function' && !isMusicPlaying) {
                     ytPlayer.playVideo();
@@ -539,8 +538,6 @@
             }, { once: true });
         };
 
-        // --- 2. YOUTUBE API & MUSIC LOGIC ---
-        // สกัด Video ID ออกจาก URL ของ YouTube
         function extractYouTubeID(url) {
             if (!url) return null;
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -548,7 +545,6 @@
             return (match && match[2].length === 11) ? match[2] : null;
         }
 
-        // ฟังก์ชันตามมาตรฐาน YouTube API จะถูกเรียกใช้อัตโนมัติเมื่อ API พร้อม
         function onYouTubeIframeAPIReady() {
             const videoId = extractYouTubeID(gangSettings.ytUrl);
             ytPlayer = new YT.Player('youtube-player', {
@@ -597,7 +593,6 @@
             }
         }
 
-        // --- 3. RENDER & DISPLAY FUNCTIONS ---
         function applySettings() {
             document.getElementById('display-name').innerText = gangSettings.name;
             document.getElementById('display-logo').src = gangSettings.logo;
@@ -606,7 +601,6 @@
                 document.body.style.backgroundImage = `linear-gradient(rgba(10, 10, 12, 0.75), rgba(10, 10, 12, 0.85)), url('${gangSettings.bgUrl}')`;
             }
 
-            // เติมค่าใส่ฟอร์มตั้งค่า
             document.getElementById('set-gang-name').value = gangSettings.name;
             document.getElementById('set-gang-logo').value = gangSettings.logo;
             document.getElementById('set-bg-url').value = gangSettings.bgUrl || "";
@@ -647,7 +641,6 @@
             });
         }
 
-        // --- 4. SEARCH & FILTER ---
         function filterMembers() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const cards = document.querySelectorAll('.member-card');
@@ -664,7 +657,6 @@
             });
         }
 
-        // --- 5. AUTHENTICATION (LOGIN) ---
         function openLoginModal() {
             if (isAdminLoggedIn) {
                 openModal('adminModal');
@@ -689,7 +681,6 @@
             }
         }
 
-        // --- 6. MEMBER MANAGEMENT (ADD/EDIT/DELETE) ---
         function saveMember(e) {
             e.preventDefault();
             const index = document.getElementById('edit-index').value;
@@ -737,7 +728,6 @@
             }
         }
 
-        // --- 7. SETTINGS MANAGEMENT ---
         function saveSettings(e) {
             e.preventDefault();
             gangSettings.name = document.getElementById('set-gang-name').value;
@@ -751,7 +741,6 @@
             localStorage.setItem('gangSettings', JSON.stringify(gangSettings));
             applySettings();
 
-            // อัปเดตการเล่นเพลง YouTube เมื่อมีเปลี่ยน URL
             const videoId = extractYouTubeID(newYtUrl);
             if (ytPlayer && videoId && newYtUrl !== oldYtUrl) {
                 ytPlayer.loadVideoById(videoId);
@@ -760,7 +749,49 @@
             alert("อัปเดตการตกแต่งเว็บสำเร็จ!");
         }
 
-        // --- 8. MODALS & TABS HELPERS ---
+        // --- ระบบส่งออก/นำเข้า ข้อมูลสำหรับย้ายเครื่อง ---
+        function exportData() {
+            const exportObject = {
+                settings: gangSettings,
+                members: members
+            };
+            const jsonString = JSON.stringify(exportObject);
+            document.getElementById('sync-json-data').value = jsonString;
+            
+            navigator.clipboard.writeText(jsonString).then(() => {
+                alert("คัดลอกรหัสข้อมูลเรียบร้อยแล้ว! นำรหัสนี้ไป วาง ในมือถือเพื่อซิงค์ข้อมูลได้เลย");
+            }).catch(() => {
+                alert("คัดลอกรหัสในช่องข้อความ แล้วนำไปวางในมือถือได้เลยครับ");
+            });
+        }
+
+        function importData() {
+            const jsonString = document.getElementById('sync-json-data').value.trim();
+            if(!jsonString) {
+                alert("กรุณาวางรหัสข้อมูล JSON ก่อนครับ");
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(jsonString);
+                if(parsed.settings && parsed.members) {
+                    gangSettings = parsed.settings;
+                    members = parsed.members;
+
+                    localStorage.setItem('gangSettings', JSON.stringify(gangSettings));
+                    localStorage.setItem('gangMembers', JSON.stringify(members));
+
+                    applySettings();
+                    renderMembers();
+                    alert("นำเข้าข้อมูลสำเร็จ! หน้าเว็บอัปเดตเรียบร้อยครับ");
+                } else {
+                    alert("รูปแบบรหัสข้อมูลไม่ถูกต้อง!");
+                }
+            } catch (err) {
+                alert("เกิดข้อผิดพลาดในการอ่านรหัสข้อมูล กรุณาตรวจสอบรหัสอีกครั้ง!");
+            }
+        }
+
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
